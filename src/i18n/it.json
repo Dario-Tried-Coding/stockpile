@@ -1,0 +1,11 @@
+{
+  "Index": {
+    "test": "Questo è solo un test!"
+  },
+  "Project": {
+    "Metadata": {
+      "title": "Stockpile | Gestionale magazzino",
+      "description": "Stockpile è un gestionale magazzino per piccole aziende."
+    }
+  }
+}

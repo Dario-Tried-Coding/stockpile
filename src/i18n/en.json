@@ -1,0 +1,11 @@
+{
+  "Index": {
+    "test": "This is just a test!"
+  },
+  "Project": {
+    "Metadata": {
+      "title": "Stockpile | Warehouse Management",
+      "description": "Stockpile is a warehouse management software for small businesses."
+    }
+  }
+}
