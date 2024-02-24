@@ -1,7 +1,7 @@
 import { authConfig } from '@/config/auth.config'
 import { db } from '@/lib/client/db'
-import { getTwoFactorConfirmationByUserId } from '@/lib/utils/db/models/2fa-confirmation'
-import { getUserById } from '@/lib/utils/db/models/user'
+import { getTwoFactorConfirmationByUserId } from '@/lib/utils/db/2fa-confirmation'
+import { getUserById } from '@/lib/utils/db/user'
 import { PrismaAdapter } from '@auth/prisma-adapter'
 import NextAuth from 'next-auth'
 

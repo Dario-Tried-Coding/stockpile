@@ -1,4 +1,4 @@
-import { getUserByEmail } from '@/lib/utils/db/models/user'
+import { getUserByEmail } from '@/lib/utils/db/user'
 import { SignInValidator } from '@/lib/common/validators/auth'
 import { NextAuthConfig } from 'next-auth'
 import Credentials from 'next-auth/providers/credentials'

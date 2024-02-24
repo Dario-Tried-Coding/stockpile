@@ -40,6 +40,8 @@ model User {
   isAccepted Boolean @default(false)
   isAdmin    Boolean @default(false)
 
+  workspaces  Workspace[]
+
   accounts      Account[]
 
   createdAt     DateTime  @default(now())
@@ -80,4 +82,23 @@ model TwoFactorToken {
   expiresAt DateTime
 
   @@unique([email, token])
+}
+
+enum Workarea {
+  VERSILIA
+}
+
+enum WorkspaceType {
+  SHOP
+  PRODUCTION
+}
+
+model Workspace {
+  id   String @id @default(cuid())
+  name String @unique
+
+  type     WorkspaceType
+  workarea Workarea
+
+  users User[]
 }
