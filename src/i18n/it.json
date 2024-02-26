@@ -1,11 +1,76 @@
 {
   "Index": {
-    "test": "Questo è solo un test!"
+    "test": "Questo è solo un test!",
+    "Server": {
+      "Errors": {
+        "500": "Errore interno del server. Riprova più tardi."
+      }
+    }
   },
   "Project": {
+    "Marketing": {
+      "name": "Stockpile",
+      "slogan": "Gestione del magazzino per piccole e medie imprese: semplice, efficace, conveniente."
+    },
     "Metadata": {
       "title": "Stockpile | Gestionale magazzino",
       "description": "Stockpile è un gestionale magazzino per piccole aziende."
+    }
+  },
+  "Auth": {
+    "Feedbacks": {
+      "Server": {
+        "Errors": {
+          "Login": {
+            "wrongCredentials": "Email o password non corretti. Verifica e riprova.",
+            "2faTokenInvalid": "Codice di verifica non valido. Verifica e riprova.",
+            "2faTokenExpired": "Codice di verifica scaduto. Richiedi un nuovo codice."
+          }
+        },
+        "Success": {
+          "Login": {
+            "confirmationEmailSent": "Email di conferma inviata. Controlla la casella di posta.",
+            "2FAEmailSent": "Codice di verifica inviato. Controlla la casella di posta."
+          }
+        }
+      }
+    },
+    "Fields": {
+      "Email": {
+        "label": "Email",
+        "placeholder": "mario.rossi@email.com"
+      },
+      "Password": {
+        "label": "Password",
+        "placeholder": "*************"
+      },
+      "2FA": {
+        "label": "Codice di verifica",
+        "placeholder": "123456"
+      }
+    },
+    "policy": "Continuando, accetti i nostri <termsLink>Termini di servizio</termsLink> e <privacyLink>l'Informativa sulla privacy</privacyLink>.",
+    "Credentials": {
+      "Login": {
+        "cta": "Accedi",
+        "cta-extended": "Accedi al tuo account",
+        "footnote": "Inserisci la tua credenziali per accedere all'account",
+        "back-to-login": "Torna al login",
+        "wait": "Attendi..."
+      },
+      "Register": {
+        "cta": "Crea account",
+        "cta-extended": "Crea un nuovo account",
+        "footnote": "Inserisci le credenziali richieste per creare il tuo account"
+      },
+      "Reset": {
+        "link": "Hai dimenticato la password?",
+        "send": "Invia email."
+      }
+    },
+    "OAuth": {
+      "or-continue-with": "OPPURE CONTINUA CON",
+      "Google": "Google"
     }
   }
 }

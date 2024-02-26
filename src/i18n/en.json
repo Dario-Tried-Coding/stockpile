@@ -1,11 +1,76 @@
 {
   "Index": {
-    "test": "This is just a test!"
+    "test": "This is just a test!",
+    "Server": {
+      "Errors": {
+        "500": "Internal server error. Please try again later."
+      }
+    }
   },
   "Project": {
+    "Marketing": {
+      "name": "Stockpile",
+      "slogan": "Warehouse management for small and medium businesses: simple, effective, affordable."
+    },
     "Metadata": {
       "title": "Stockpile | Warehouse Management",
-      "description": "Stockpile is a warehouse management software for small businesses."
+      "description": "Stockpile is a warehouse management system for small businesses."
+    }
+  },
+  "Auth": {
+    "Feedbacks": {
+      "Server": {
+        "Errors": {
+          "Login": {
+            "wrongCredentials": "Incorrect email or password. Please verify and try again.",
+            "2faTokenInvalid": "Invalid verification code. Please verify and try again.",
+            "2faTokenExpired": "Verification code expired. Request a new code."
+          }
+        },
+        "Success": {
+          "Login": {
+            "confirmationEmailSent": "Confirmation email sent. Check your inbox.",
+            "2FAEmailSent": "Verification code sent. Check your inbox."
+          }
+        }
+      }
+    },
+    "Fields": {
+      "Email": {
+        "label": "Email",
+        "placeholder": "mario.rossi@email.com"
+      },
+      "Password": {
+        "label": "Password",
+        "placeholder": "*************"
+      },
+      "2FA": {
+        "label": "Verification code",
+        "placeholder": "123456"
+      }
+    },
+    "policy": "By continuing, you accept our <termsLink>Terms of Service</termsLink> and <privacyLink>Privacy Policy</privacyLink>.",
+    "Credentials": {
+      "Login": {
+        "cta": "Log in",
+        "cta-extended": "Log in to your account",
+        "footnote": "Enter your credentials to access your account",
+        "back-to-login": "Back to login",
+        "wait": "Please wait..."
+      },
+      "Register": {
+        "cta": "Create account",
+        "cta-extended": "Create a new account",
+        "footnote": "Enter the required credentials to create your account"
+      },
+      "Reset": {
+        "link": "Forgot your password?",
+        "send": "Send email."
+      }
+    },
+    "OAuth": {
+      "or-continue-with": "OR CONTINUE WITH",
+      "Google": "Google"
     }
   }
 }

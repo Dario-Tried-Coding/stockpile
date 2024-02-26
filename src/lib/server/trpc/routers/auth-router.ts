@@ -1,20 +1,21 @@
 import { DEFAULT_LOGIN_REDIRECT } from '@/config/routes.config'
 import { New2FAConfirmationNeededError } from '@/errors/auth'
-import { sendPassorwordResetEmail, sendTwoFactorTokenEmail, sendVerificationEmail } from '@/lib/utils/emails'
-import { generatePasswordResetToken, generateTwoFactorToken, generateVerificationToken } from '@/lib/utils/tokens'
-import { signIn } from '@/lib/server/auth'
 import { db } from '@/lib/client/db'
+import { NewPasswordValidator, PasswordResetValidator, RegisterValidator, SignInValidator } from '@/lib/common/validators/auth'
+import { signIn } from '@/lib/server/auth'
 import { publicProcedure, router } from '@/lib/server/trpc/init'
 import { getTwoFactorConfirmationByUserId } from '@/lib/utils/db/2fa-confirmation'
 import { getTwoFactorTokenByEmail } from '@/lib/utils/db/2fa-token'
-import { NewPasswordValidator, PasswordResetValidator, RegisterValidator, SignInValidator } from '@/lib/common/validators/auth'
+import { getPasswordResetTokenByToken } from '@/lib/utils/db/password-reset-token'
+import { getUserByEmail } from '@/lib/utils/db/user'
+import { getVerificationTokenByToken } from '@/lib/utils/db/verification-token'
+import { sendPassorwordResetEmail, sendTwoFactorTokenEmail, sendVerificationEmail } from '@/lib/utils/emails'
+import { generatePasswordResetToken, generateTwoFactorToken, generateVerificationToken } from '@/lib/utils/tokens'
 import { TRPCError } from '@trpc/server'
 import bcrypt from 'bcryptjs'
 import { AuthError } from 'next-auth'
+import { getTranslations } from 'next-intl/server'
 import { z } from 'zod'
-import { getUserByEmail } from '@/lib/utils/db/user'
-import { getVerificationTokenByToken } from '@/lib/utils/db/verification-token'
-import { getPasswordResetTokenByToken } from '@/lib/utils/db/password-reset-token'
 
 export const authRouter = router({
   createUser: publicProcedure.input(RegisterValidator).mutation(async ({ input: { email, password, name } }) => {
@@ -37,21 +38,24 @@ export const authRouter = router({
 
     return { success: 'Confirmation email sent!' }
   }),
-  signUserIn: publicProcedure.input(SignInValidator).mutation(async ({ input: { email, password, code } }) => {
+  signUserIn: publicProcedure.input(SignInValidator).mutation(async ({ input: { email, password, code }, ctx: { locale } }) => {
+    const t = await getTranslations({ locale, namespace: 'Auth.Feedbacks.Server' })
+    const errorsT = await getTranslations({ locale, namespace: 'Index.Server.Errors'})
+
     // Check credentials
     const dbUser = await getUserByEmail(email)
 
-    if (!dbUser || !dbUser.email || !dbUser.password) throw new TRPCError({ code: 'NOT_FOUND', message: 'auth_noUser' })
+    if (!dbUser || !dbUser.email || !dbUser.password) throw new TRPCError({ code: 'NOT_FOUND', message: t('Errors.Login.wrongCredentials') })
 
     const isPasswordValid = await bcrypt.compare(password, dbUser.password)
-    if (!isPasswordValid) throw new TRPCError({ code: 'FORBIDDEN', message: 'auth_wrongCredentials' })
+    if (!isPasswordValid) throw new TRPCError({ code: 'FORBIDDEN', message: t('Errors.Login.wrongCredentials') })
 
     // Check if email is verified
     if (!dbUser.emailVerified) {
       const verificationToken = await generateVerificationToken(dbUser.email)
       await sendVerificationEmail(verificationToken.email, verificationToken.token)
 
-      return { emailConfirmation: 'Confirmation email sent!' }
+      return { emailConfirmation: t('Success.Login.confirmationEmailSent') }
     }
 
     // Check if 2FA is enabled
@@ -69,17 +73,17 @@ export const authRouter = router({
             const twoFactorToken = await generateTwoFactorToken(dbUser.email)
             await sendTwoFactorTokenEmail(twoFactorToken.email, twoFactorToken.token)
 
-            return { twoFactor: '2FA email sent!' }
+            return { twoFactor: t('Success.Login.2FAEmailSent') }
           }
 
           const twoFactorToken = await getTwoFactorTokenByEmail(dbUser.email)
-          if (!twoFactorToken) throw new TRPCError({ code: 'NOT_FOUND', message: '2fa_tokenInvalid' })
+          if (!twoFactorToken) throw new TRPCError({ code: 'NOT_FOUND', message: t('Errors.Login.2faTokenInvalid') })
 
           const hasExpired = new Date(twoFactorToken.expiresAt) < new Date()
-          if (hasExpired) throw new TRPCError({ code: 'FORBIDDEN', message: '2fa_tokenExpired' })
+          if (hasExpired) throw new TRPCError({ code: 'FORBIDDEN', message: t('Errors.Login.2faTokenExpired') })
 
           const isCodeValid = twoFactorToken.token === code
-          if (!isCodeValid) throw new TRPCError({ code: 'FORBIDDEN', message: '2fa_tokenInvalid' })
+          if (!isCodeValid) throw new TRPCError({ code: 'FORBIDDEN', message: t('Errors.Login.2faTokenInvalid') })
 
           await db.twoFactorToken.delete({ where: { id: twoFactorToken.id } })
 
@@ -101,8 +105,8 @@ export const authRouter = router({
       return { redirectUrl }
     } catch (error) {
       if (error instanceof AuthError) {
-        if (error.type === 'CredentialsSignin') throw new TRPCError({ code: 'FORBIDDEN', message: 'auth_wrongCredentials' })
-        else throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'internal' })
+        if (error.type === 'CredentialsSignin') throw new TRPCError({ code: 'FORBIDDEN', message: t('Errors.Login.wrongCredentials') })
+        else throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: errorsT('500') })
       }
     }
   }),

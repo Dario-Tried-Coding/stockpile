@@ -6,13 +6,15 @@ import { Button } from '@/components/ui/Button'
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/Form'
 import { Input } from '@/components/ui/Input'
 import { Separator } from '@/components/ui/Separator'
+import { CALLBACK_URL } from '@/config/auth.config'
 import useOAuth from '@/hooks/auth/use-OAuth'
 import { useFormMess } from '@/hooks/auth/use-form-mess'
+import { SignInValidator, TSignInValidator } from '@/lib/common/validators/auth'
 import { trpc } from '@/lib/server/trpc/trpc'
 import { cn } from '@/lib/utils'
-import { SignInValidator, TSignInValidator } from '@/lib/common/validators/auth'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Loader2 } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { FC, HTMLAttributes, useState } from 'react'
@@ -23,8 +25,10 @@ interface LoginFormProps extends HTMLAttributes<HTMLFormElement> {}
 const LoginForm: FC<LoginFormProps> = ({ className, ...rest }) => {
   const router = useRouter()
 
+  const t = useTranslations('Auth')
+
   const searchParams = useSearchParams()
-  const callbackUrl = searchParams.get('callbackUrl')
+  const callbackUrl = searchParams.get(CALLBACK_URL)
 
   const [message, setMessage] = useFormMess()
 
@@ -35,7 +39,7 @@ const LoginForm: FC<LoginFormProps> = ({ className, ...rest }) => {
     defaultValues: {
       email: '',
       password: '',
-      code: ''
+      code: '',
     },
   })
 
@@ -47,31 +51,14 @@ const LoginForm: FC<LoginFormProps> = ({ className, ...rest }) => {
   } = trpc.auth.signUserIn.useMutation({
     onSuccess(data) {
       if (data?.redirectUrl) router.push(data.redirectUrl)
-      else if (data?.emailConfirmation) setMessage({ message: 'Email di conferma inviata. Controlla la casella di posta.', variant: 'success' })
+      else if (data?.emailConfirmation) setMessage({ message: data.emailConfirmation, variant: 'success' })
       else if (data?.twoFactor) {
         setShow2FA(true)
-        setMessage({ message: 'Codice di verifica inviato. Controlla la casella di posta.', variant: 'success' })
+        setMessage({ message: data.twoFactor, variant: 'success' })
       }
     },
     onError(err) {
-      if (err.message.includes('auth'))
-        return setMessage({
-          message: 'Email o password non corretti. Verifica e riprova.',
-          variant: 'error',
-        })
-
-      if (err.data?.stack?.includes('2fa')) {
-        if (err.data?.stack?.includes('tokenExpired'))
-          return setMessage({
-            message: 'Codice di verifica scaduto. Richiedine uno nuovo.',
-            variant: 'error',
-          })
-        if (err.data?.stack?.includes('tokenInvalid'))
-          return setMessage({
-            message: 'Codice di verifica non valido. Verifica e riprova.',
-            variant: 'error',
-          })
-      }
+      return setMessage({ message: err.message, variant: 'error' })
     },
   })
 
@@ -93,11 +80,11 @@ const LoginForm: FC<LoginFormProps> = ({ className, ...rest }) => {
                 name='code'
                 render={({ field }) => (
                   <FormItem className='flex flex-col'>
-                    <FormLabel className='self-start'>Codice di verifica</FormLabel>
+                    <FormLabel className='self-start'>{t('Fields.2FA.label')}</FormLabel>
                     <FormControl>
                       <Input
                         {...field}
-                        placeholder='123456'
+                        placeholder={t('Fields.2FA.placeholder')}
                         min={0}
                         max={999999}
                         maxLength={6}
@@ -119,11 +106,11 @@ const LoginForm: FC<LoginFormProps> = ({ className, ...rest }) => {
                 name='email'
                 render={({ field }) => (
                   <FormItem className='flex flex-col'>
-                    <FormLabel className='self-start'>Email</FormLabel>
+                    <FormLabel className='self-start'>{t('Fields.Email.label')}</FormLabel>
                     <FormControl>
                       <Input
                         {...field}
-                        placeholder='mario.rossi@example.com'
+                        placeholder={t('Fields.Email.placeholder')}
                         disabled={isCredentialsLoading || (isSuccess && !!data?.redirectUrl) || !!isOAuthLoading}
                         type='email'
                         onInput={() => {
@@ -139,11 +126,11 @@ const LoginForm: FC<LoginFormProps> = ({ className, ...rest }) => {
                 name='password'
                 render={({ field }) => (
                   <FormItem className='flex flex-col'>
-                    <FormLabel className='self-start'>Password</FormLabel>
+                    <FormLabel className='self-start'>{t('Fields.Password.label')}</FormLabel>
                     <FormControl>
                       <Input
                         {...field}
-                        placeholder='************'
+                        placeholder={t('Fields.Password.placeholder')}
                         disabled={isCredentialsLoading || (isSuccess && !!data?.redirectUrl) || !!isOAuthLoading}
                         type='password'
                         onInput={() => {
@@ -152,7 +139,7 @@ const LoginForm: FC<LoginFormProps> = ({ className, ...rest }) => {
                       />
                     </FormControl>
                     <Link href='/auth/reset' className='self-end text-xs font-medium underline-offset-4 hover:underline'>
-                      Hai dimenticato la password?
+                      {t('Credentials.Reset.link')}
                     </Link>
                   </FormItem>
                 )}
@@ -163,15 +150,10 @@ const LoginForm: FC<LoginFormProps> = ({ className, ...rest }) => {
           <Button
             className='w-full gap-1'
             type='submit'
-            disabled={
-              !!isOAuthLoading ||
-              !form.formState.isValid ||
-              isCredentialsLoading ||
-              (isSuccess && !!data?.redirectUrl)
-            }
+            disabled={!!isOAuthLoading || !form.formState.isValid || isCredentialsLoading || (isSuccess && !!data?.redirectUrl)}
           >
             {isCredentialsLoading && <Loader2 className='h-4 w-4 animate-spin' />}{' '}
-            {isSuccess && !!data?.redirectUrl ? 'Attendi...' : 'Accedi'}
+            {isSuccess && !!data?.redirectUrl ? t('Credentials.Login.wait') : t('Credentials.Login.cta')}
           </Button>
         </div>
 
@@ -179,7 +161,7 @@ const LoginForm: FC<LoginFormProps> = ({ className, ...rest }) => {
           <>
             <div className='mt-6 flex items-center gap-2'>
               <Separator className='shrink' />
-              <span className='shrink-0 grow-0 text-xs text-base-500'>O CONTINUA CON</span>
+              <span className='shrink-0 grow-0 text-xs text-base-500'>{t('OAuth.or-continue-with')}</span>
               <Separator className='shrink' />
             </div>
 

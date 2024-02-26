@@ -1,8 +1,9 @@
 import { auth } from '@/lib/server/auth'
+import { Context } from '@/lib/server/trpc/context'
 import { TRPCError, initTRPC } from '@trpc/server'
 import superjson from 'superjson'
 
-const t = initTRPC.create({
+const t = initTRPC.context<Context>().create({
   transformer: superjson,
 })
 const middleware = t.middleware
