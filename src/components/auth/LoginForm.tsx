@@ -29,8 +29,9 @@ const LoginForm: FC<LoginFormProps> = ({ className, ...rest }) => {
 
   const searchParams = useSearchParams()
   const callbackUrl = searchParams.get(CALLBACK_URL)
+  const urlError = searchParams.get('error') === 'OAuthAccountNotLinked' ? t('OAuth.email-already-in-use') : ''
 
-  const [message, setMessage] = useFormMess()
+  const [message, setMessage] = useFormMess(urlError ? { variant: 'error', message: urlError } : null)
 
   const [show2FA, setShow2FA] = useState(false)
 

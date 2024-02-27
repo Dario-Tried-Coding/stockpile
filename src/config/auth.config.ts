@@ -8,6 +8,9 @@ import bcrypt from 'bcryptjs'
 export const CALLBACK_URL = 'callbackUrl' as const
 
 export const authConfig = {
+  pages: {
+    signIn: '/auth/login'
+  },
   providers: [
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID,

@@ -111,7 +111,8 @@
     },
     "OAuth": {
       "or-continue-with": "OPPURE CONTINUA CON",
-      "Google": "Google"
+      "Google": "Google",
+      "email-already-in-use": "Hai già un account con questa email."
     }
   }
 }
