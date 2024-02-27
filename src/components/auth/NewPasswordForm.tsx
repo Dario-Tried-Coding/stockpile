@@ -13,10 +13,13 @@ import { Loader2 } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
 import { FC, HTMLAttributes } from 'react'
 import { useForm } from 'react-hook-form'
+import { useTranslations } from 'next-intl'
 
 interface NewPasswordFormProps extends HTMLAttributes<HTMLFormElement> {}
 
 const NewPasswordForm: FC<NewPasswordFormProps> = ({ className, ...rest }) => {
+  const t = useTranslations('Auth')
+
   const searchParams = useSearchParams()
   const token = searchParams.get('token')
 
@@ -27,21 +30,23 @@ const NewPasswordForm: FC<NewPasswordFormProps> = ({ className, ...rest }) => {
     defaultValues: {
       password: '',
       confirmPassword: '',
-      token
+      token,
     },
   })
 
-  const { isPending, mutate: createNewPassword, isSuccess } = trpc.auth.createNewPassword.useMutation({
-    onSuccess() {
-      setMessage({variant: 'success', message: 'Password creata con successo.'})
+  const {
+    isPending,
+    mutate: createNewPassword,
+    isSuccess,
+  } = trpc.auth.createNewPassword.useMutation({
+    onSuccess({ message }) {
+      setMessage({ variant: 'success', message })
     },
     onError(err) {
-      if (err.data?.code === 'BAD_REQUEST') return setMessage({variant: 'error', message: 'Impossibile creare nuova password.'})
-      else if (err.data?.code === 'NOT_FOUND') return setMessage({variant: 'error', message: 'Impossibile creare nuova password. Token non valido.'})
-      else if (err.data?.code === 'FORBIDDEN') return setMessage({variant: 'error', message: 'Impossibile creare nuova password. Token scaduto.'})
-    }
+      setMessage({ variant: 'error', message: err.message })
+    },
   })
-  
+
   const handleSubmit = form.handleSubmit((data) => {
     setMessage(null)
     createNewPassword(data)
@@ -55,9 +60,9 @@ const NewPasswordForm: FC<NewPasswordFormProps> = ({ className, ...rest }) => {
           control={form.control}
           render={({ field }) => (
             <FormItem className='flex flex-col'>
-              <FormLabel className='self-start'>Password</FormLabel>
+              <FormLabel className='self-start'>{t('Fields.Password.label')}</FormLabel>
               <FormControl>
-                <Input {...field} placeholder='*************' disabled={isSuccess} type='password' />
+                <Input {...field} placeholder={t('Fields.Password.placeholder')} disabled={isSuccess} type='password' />
               </FormControl>
             </FormItem>
           )}
@@ -67,17 +72,17 @@ const NewPasswordForm: FC<NewPasswordFormProps> = ({ className, ...rest }) => {
           control={form.control}
           render={({ field }) => (
             <FormItem className='flex flex-col'>
-              <FormLabel className='self-start'>Conferma password</FormLabel>
+              <FormLabel className='self-start'>{t('Fields.ConfirmPassword.label')}</FormLabel>
               <FormControl>
-                <Input {...field} placeholder='*************' disabled={isSuccess} type='password' />
+                <Input {...field} placeholder={t('Fields.ConfirmPassword.placeholder')} disabled={isSuccess} type='password' />
               </FormControl>
             </FormItem>
           )}
         />
-        {form.getValues().password !== form.getValues().confirmPassword && <p className='text-sm'>Assicurati che le password coincidano.</p> }
+        {form.getValues().password !== form.getValues().confirmPassword && <p className='text-sm'>{t('Feedbacks.Client.Errors.confirm-password')}</p>}
         {message !== null && <FormMess {...message} />}
         <Button className='w-full gap-1' type='submit' disabled={!form.formState.isValid || isSuccess}>
-          {isPending && <Loader2 className='h-4 w-4 animate-spin' />} Crea nuova password
+          {isPending && <Loader2 className='h-4 w-4 animate-spin' />} {t('Credentials.NewPassword.cta')}
         </Button>
       </form>
     </Form>

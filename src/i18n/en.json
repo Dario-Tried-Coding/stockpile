@@ -10,32 +10,44 @@
   "Project": {
     "Marketing": {
       "name": "Stockpile",
-      "slogan": "Warehouse management for small and medium businesses: simple, effective, affordable."
+      "slogan": "Warehouse management for small and medium-sized businesses: simple, effective, affordable."
     },
     "Metadata": {
-      "title": "Stockpile | Warehouse Management",
+      "title": "Stockpile | Warehouse Management System",
       "description": "Stockpile is a warehouse management system for small businesses."
     }
   },
   "Auth": {
     "Feedbacks": {
+      "Client": {
+        "Errors": {
+          "confirm-password": "Make sure passwords match."
+        }
+      },
       "Server": {
         "Errors": {
-          "Login": {
-            "wrongCredentials": "Incorrect email or password. Please verify and try again.",
-            "2faTokenInvalid": "Invalid verification code. Please verify and try again.",
-            "2faTokenExpired": "Verification code expired. Request a new code."
-          }
+          "user-not-found": "User not found.",
+          "email-not-usable": "Email not usable. Try with another email.",
+          "email-not-found": "Email address not found. Please verify and try again.",
+          "wrong-credentials": "Incorrect email or password. Please verify and try again.",
+          "2fa-token-invalid": "Invalid verification code. Please verify and try again.",
+          "2fa-token-expired": "Verification code expired. Request a new code.",
+          "psw-reset-token-invalid": "Unable to create a new password. Invalid token.",
+          "psw-reset-token-expired": "Unable to create a new password. Token expired."
         },
         "Success": {
-          "Login": {
-            "confirmationEmailSent": "Confirmation email sent. Check your inbox.",
-            "2FAEmailSent": "Verification code sent. Check your inbox."
-          }
+          "confirmation-email-sent": "Confirmation email sent. Check your inbox.",
+          "reset-email-sent": "Email sent. Check your inbox.",
+          "2FA-email-sent": "Verification code sent. Check your inbox.",
+          "psw-reset": "Password successfully reset."
         }
       }
     },
     "Fields": {
+      "Name": {
+        "label": "Name",
+        "placeholder": "Mario Rossi"
+      },
       "Email": {
         "label": "Email",
         "placeholder": "mario.rossi@email.com"
@@ -44,28 +56,57 @@
         "label": "Password",
         "placeholder": "*************"
       },
+      "ConfirmPassword": {
+        "label": "Confirm Password",
+        "placeholder": "*************"
+      },
       "2FA": {
-        "label": "Verification code",
+        "label": "Verification Code",
         "placeholder": "123456"
       }
     },
     "policy": "By continuing, you accept our <termsLink>Terms of Service</termsLink> and <privacyLink>Privacy Policy</privacyLink>.",
     "Credentials": {
       "Login": {
-        "cta": "Log in",
+        "cta": "Log In",
         "cta-extended": "Log in to your account",
-        "footnote": "Enter your credentials to access your account",
+        "footnote": "Enter your credentials to access the account",
         "back-to-login": "Back to login",
         "wait": "Please wait..."
       },
       "Register": {
-        "cta": "Create account",
+        "cta": "Create Account",
         "cta-extended": "Create a new account",
         "footnote": "Enter the required credentials to create your account"
       },
       "Reset": {
+        "heading": "Forgot your password?",
+        "footnote": "Enter the email address you used to create your account, and we'll send you a link to reset it.",
         "link": "Forgot your password?",
-        "send": "Send email."
+        "send": "Send email"
+      },
+      "NewPassword": {
+        "heading": "Create new password",
+        "footnote": "Enter and confirm the new password you want to set for your account.",
+        "cta": "Create new password"
+      },
+      "Verify": {
+        "Heading": {
+          "error": "Email confirmation failed",
+          "success": "Email confirmation successful",
+          "pending": "Email confirmation in progress..."
+        },
+        "Footnote": {
+          "generic-error": "We couldn't verify your email.",
+          "expired": "The verification link is invalid or expired. Request a new link.",
+          "success": "Your email has been successfully verified. You can now access your account.",
+          "pending": "Please wait while we verify your email."
+        },
+        "ContactSupport": {
+          "error": "If the issue persists, please contact support.",
+          "success": "For any questions, please contact our support team."
+        },
+        "do-not-close-window": "This may take a few moments. Please do not close the page."
       }
     },
     "OAuth": {

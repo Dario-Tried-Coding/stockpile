@@ -10,12 +10,15 @@ import { trpc } from '@/lib/server/trpc/trpc'
 import { cn } from '@/lib/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Loader2 } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { FC, HTMLAttributes } from 'react'
 import { useForm } from 'react-hook-form'
 
 interface ResetEmailFormProps extends HTMLAttributes<HTMLFormElement> {}
 
 const ResetEmailForm: FC<ResetEmailFormProps> = ({ className, ...rest }) => {
+  const t = useTranslations('Auth')
+
   const [message, setMessage] = useFormMess()
 
   const form = useForm<TPasswordResetValidator>({
@@ -25,12 +28,16 @@ const ResetEmailForm: FC<ResetEmailFormProps> = ({ className, ...rest }) => {
     },
   })
 
-  const { isPending, mutate: sendResetEmail, isSuccess } = trpc.auth.sendResetPasswordEmail.useMutation({
-    onSuccess() {
-      setMessage({ message: 'Email inviata. Controlla la casella di posta.', variant: 'success' })
+  const {
+    isPending,
+    mutate: sendResetEmail,
+    isSuccess,
+  } = trpc.auth.sendResetPasswordEmail.useMutation({
+    onSuccess({ message }) {
+      setMessage({ message, variant: 'success' })
     },
     onError(err) {
-      if (err.data?.code === 'NOT_FOUND') return setMessage({ message: 'Indirizzo e-mail non trovato. Verifica e riprova.', variant: 'error' })
+      setMessage({ message: err.message, variant: 'error' })
     },
   })
 
@@ -47,11 +54,11 @@ const ResetEmailForm: FC<ResetEmailFormProps> = ({ className, ...rest }) => {
           name='email'
           render={({ field }) => (
             <FormItem className='flex flex-col'>
-              <FormLabel className='self-start'>Email</FormLabel>
+              <FormLabel className='self-start'>{t('Fields.Email.label')}</FormLabel>
               <FormControl>
                 <Input
                   {...field}
-                  placeholder='mario.rossi@example.com'
+                  placeholder={t('Fields.Email.placeholder')}
                   disabled={isSuccess}
                   type='email'
                   onInput={() => {
@@ -64,7 +71,7 @@ const ResetEmailForm: FC<ResetEmailFormProps> = ({ className, ...rest }) => {
         />
         {message !== null && <FormMess {...message} />}
         <Button className='w-full gap-1' type='submit' disabled={!form.formState.isValid || isSuccess}>
-          {isPending && <Loader2 className='h-4 w-4 animate-spin' />} Invia email
+          {isPending && <Loader2 className='h-4 w-4 animate-spin' />} {t('Credentials.Reset.send')}
         </Button>
       </form>
     </Form>

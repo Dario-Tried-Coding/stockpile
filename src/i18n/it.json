@@ -19,29 +19,45 @@
   },
   "Auth": {
     "Feedbacks": {
+      "Client": {
+        "Errors": {
+          "confirm-password": "Assicurati che le password corrispondano."
+        }
+      },
       "Server": {
         "Errors": {
-          "Login": {
-            "wrongCredentials": "Email o password non corretti. Verifica e riprova.",
-            "2faTokenInvalid": "Codice di verifica non valido. Verifica e riprova.",
-            "2faTokenExpired": "Codice di verifica scaduto. Richiedi un nuovo codice."
-          }
+          "user-not-found": "Utente non trovato.",
+          "email-not-usable": "Email non utilizzabile. Prova con un'altra email.",
+          "email-not-found": "Indirizzo e-mail non trovato. Verifica e riprova.",
+          "wrong-credentials": "Email o password non corretti. Verifica e riprova.",
+          "2fa-token-invalid": "Codice di verifica non valido. Verifica e riprova.",
+          "2fa-token-expired": "Codice di verifica scaduto. Richiedi un nuovo codice.",
+          "psw-reset-token-invalid": "Impossibile creare nuova password. Token non valido.",
+          "psw-reset-token-expired": "Impossibile creare nuova password. Token scaduto."
         },
         "Success": {
-          "Login": {
-            "confirmationEmailSent": "Email di conferma inviata. Controlla la casella di posta.",
-            "2FAEmailSent": "Codice di verifica inviato. Controlla la casella di posta."
-          }
+          "confirmation-email-sent": "Email di conferma inviata. Controlla la casella di posta.",
+          "reset-email-sent": "Email inviata. Controlla la casella di posta.",
+          "2FA-email-sent": "Codice di verifica inviato. Controlla la casella di posta.",
+          "psw-reset": "Password reimpostata con successo."
         }
       }
     },
     "Fields": {
+      "Name": {
+        "label": "Nome",
+        "placeholder": "Mario Rossi"
+      },
       "Email": {
         "label": "Email",
         "placeholder": "mario.rossi@email.com"
       },
       "Password": {
         "label": "Password",
+        "placeholder": "*************"
+      },
+      "ConfirmPassword": {
+        "label": "Conferma Password",
         "placeholder": "*************"
       },
       "2FA": {
@@ -64,8 +80,33 @@
         "footnote": "Inserisci le credenziali richieste per creare il tuo account"
       },
       "Reset": {
+        "heading": "Password dimenticata?",
+        "footnote": "Inserisci l'indirizzo email che hai utilizzato per creare il tuo account e ti invieremo un link per reimpostarla.",
         "link": "Hai dimenticato la password?",
-        "send": "Invia email."
+        "send": "Invia email"
+      },
+      "NewPassword": {
+        "heading": "Crea nuova password",
+        "footnote": "Inserisci e conferma la nuova password che vuoi impostare per il tuo account.",
+        "cta": "Crea nuova password"
+      },
+      "Verify": {
+        "Heading": {
+          "error": "Conferma email non riuscita",
+          "success": "Conferma email riuscita",
+          "pending": "Conferma email in corso..."
+        },
+        "Footnote": {
+          "generic-error": "Non è stato possibile verificare la tua email.",
+          "expired": "Il link di verifica è invalido o scaduto. Richiedi un nuovo link.",
+          "success": "La tua email è stata verificata con successo. Puoi accedere al tuo account adesso.",
+          "pending": "Per piacere attendi mentre verifichiamo la tua email."
+        },
+        "ContactSupport": {
+          "error": "Se il problema persiste, per piacere contatta l'assistenza.",
+          "success": "Per qualsiasi dubbio contatta il nostro team di supporto."
+        },
+        "do-not-close-window": "Ci possono volere alcuni istanti. Per piacere non chiudere la pagina."
       }
     },
     "OAuth": {

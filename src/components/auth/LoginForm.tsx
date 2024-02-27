@@ -51,10 +51,10 @@ const LoginForm: FC<LoginFormProps> = ({ className, ...rest }) => {
   } = trpc.auth.signUserIn.useMutation({
     onSuccess(data) {
       if (data?.redirectUrl) router.push(data.redirectUrl)
-      else if (data?.emailConfirmation) setMessage({ message: data.emailConfirmation, variant: 'success' })
+      else if (data?.emailConfirmation) setMessage({ message: data.message, variant: 'success' })
       else if (data?.twoFactor) {
         setShow2FA(true)
-        setMessage({ message: data.twoFactor, variant: 'success' })
+        setMessage({ message: data.message, variant: 'success' })
       }
     },
     onError(err) {

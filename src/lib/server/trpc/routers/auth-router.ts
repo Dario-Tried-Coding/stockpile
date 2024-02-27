@@ -14,14 +14,17 @@ import { generatePasswordResetToken, generateTwoFactorToken, generateVerificatio
 import { TRPCError } from '@trpc/server'
 import bcrypt from 'bcryptjs'
 import { AuthError } from 'next-auth'
+import { useTranslations } from 'next-intl'
 import { getTranslations } from 'next-intl/server'
 import { z } from 'zod'
 
 export const authRouter = router({
-  createUser: publicProcedure.input(RegisterValidator).mutation(async ({ input: { email, password, name } }) => {
+  createUser: publicProcedure.input(RegisterValidator).mutation(async ({ input: { email, password, name }, ctx: { locale } }) => {
+    const t = await getTranslations({ locale, namespace: 'Auth.Feedbacks.Server' })
+
     const dbUser = await getUserByEmail(email)
 
-    if (dbUser) throw new TRPCError({ code: 'CONFLICT', message: 'Email already in use!' })
+    if (dbUser) throw new TRPCError({ code: 'CONFLICT', message: t('Errors.email-not-usable') })
 
     const hashedPassword = await bcrypt.hash(password, 10)
 
@@ -36,26 +39,26 @@ export const authRouter = router({
     const verificationToken = await generateVerificationToken(user.email!)
     await sendVerificationEmail(verificationToken.email, verificationToken.token)
 
-    return { success: 'Confirmation email sent!' }
+    return t('Success.confirmation-email-sent')
   }),
   signUserIn: publicProcedure.input(SignInValidator).mutation(async ({ input: { email, password, code }, ctx: { locale } }) => {
     const t = await getTranslations({ locale, namespace: 'Auth.Feedbacks.Server' })
-    const errorsT = await getTranslations({ locale, namespace: 'Index.Server.Errors'})
+    const errorsT = await getTranslations({ locale, namespace: 'Index.Server.Errors' })
 
     // Check credentials
     const dbUser = await getUserByEmail(email)
 
-    if (!dbUser || !dbUser.email || !dbUser.password) throw new TRPCError({ code: 'NOT_FOUND', message: t('Errors.Login.wrongCredentials') })
+    if (!dbUser || !dbUser.email || !dbUser.password) throw new TRPCError({ code: 'NOT_FOUND', message: t('Errors.wrong-credentials') })
 
     const isPasswordValid = await bcrypt.compare(password, dbUser.password)
-    if (!isPasswordValid) throw new TRPCError({ code: 'FORBIDDEN', message: t('Errors.Login.wrongCredentials') })
+    if (!isPasswordValid) throw new TRPCError({ code: 'FORBIDDEN', message: t('Errors.wrong-credentials') })
 
     // Check if email is verified
     if (!dbUser.emailVerified) {
       const verificationToken = await generateVerificationToken(dbUser.email)
       await sendVerificationEmail(verificationToken.email, verificationToken.token)
 
-      return { emailConfirmation: t('Success.Login.confirmationEmailSent') }
+      return { emailConfirmation: true, message: t('Success.confirmation-email-sent') }
     }
 
     // Check if 2FA is enabled
@@ -73,17 +76,17 @@ export const authRouter = router({
             const twoFactorToken = await generateTwoFactorToken(dbUser.email)
             await sendTwoFactorTokenEmail(twoFactorToken.email, twoFactorToken.token)
 
-            return { twoFactor: t('Success.Login.2FAEmailSent') }
+            return { twoFactor: true, message: t('Success.2FA-email-sent') }
           }
 
           const twoFactorToken = await getTwoFactorTokenByEmail(dbUser.email)
-          if (!twoFactorToken) throw new TRPCError({ code: 'NOT_FOUND', message: t('Errors.Login.2faTokenInvalid') })
+          if (!twoFactorToken) throw new TRPCError({ code: 'NOT_FOUND', message: t('Errors.2fa-token-invalid') })
 
           const hasExpired = new Date(twoFactorToken.expiresAt) < new Date()
-          if (hasExpired) throw new TRPCError({ code: 'FORBIDDEN', message: t('Errors.Login.2faTokenExpired') })
+          if (hasExpired) throw new TRPCError({ code: 'FORBIDDEN', message: t('Errors.2fa-token-expired') })
 
           const isCodeValid = twoFactorToken.token === code
-          if (!isCodeValid) throw new TRPCError({ code: 'FORBIDDEN', message: t('Errors.Login.2faTokenInvalid') })
+          if (!isCodeValid) throw new TRPCError({ code: 'FORBIDDEN', message: t('Errors.2fa-token-invalid') })
 
           await db.twoFactorToken.delete({ where: { id: twoFactorToken.id } })
 
@@ -105,7 +108,7 @@ export const authRouter = router({
       return { redirectUrl }
     } catch (error) {
       if (error instanceof AuthError) {
-        if (error.type === 'CredentialsSignin') throw new TRPCError({ code: 'FORBIDDEN', message: t('Errors.Login.wrongCredentials') })
+        if (error.type === 'CredentialsSignin') throw new TRPCError({ code: 'FORBIDDEN', message: t('Errors.wrong-credentials') })
         else throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: errorsT('500') })
       }
     }
@@ -135,31 +138,34 @@ export const authRouter = router({
 
     return { success: 'Email verified!' }
   }),
-  sendResetPasswordEmail: publicProcedure.input(PasswordResetValidator).mutation(async ({ input: { email } }) => {
+  sendResetPasswordEmail: publicProcedure.input(PasswordResetValidator).mutation(async ({ input: { email }, ctx: { locale } }) => {
+    const t = useTranslations('Auth')
+
     const dbUser = await getUserByEmail(email)
 
-    if (!dbUser) throw new TRPCError({ code: 'NOT_FOUND', message: 'Email not found!' })
+    if (!dbUser) throw new TRPCError({ code: 'NOT_FOUND', message: t('Feedbacks.Server.Errors.email-not-found') })
 
-    // TODO: Generate reset token and send email
     const passwordResetToken = await generatePasswordResetToken(dbUser.email!)
     await sendPassorwordResetEmail(passwordResetToken.email, passwordResetToken.token)
 
-    return { success: 'Email sent!' }
+    return { success: true, message: t('Feedbacks.Server.Success.reset-email-sent') }
   }),
-  createNewPassword: publicProcedure.input(NewPasswordValidator).mutation(async ({ input: { password, token } }) => {
-    if (!token) throw new TRPCError({ code: 'BAD_REQUEST', message: 'Token not provided!' })
+  createNewPassword: publicProcedure.input(NewPasswordValidator).mutation(async ({ input: { password, token }, ctx: { locale } }) => {
+    const t = await getTranslations({ locale, namespace: 'Auth' })
+    
+    if (!token) throw new TRPCError({ code: 'BAD_REQUEST', message: t('Feedbacks.Server.Errors.psw-reset-token-invalid') })
 
     const passwordResetToken = await getPasswordResetTokenByToken(token)
 
-    if (!passwordResetToken) throw new TRPCError({ code: 'NOT_FOUND', message: 'Token not found!' })
+    if (!passwordResetToken) throw new TRPCError({ code: 'NOT_FOUND', message: t('Feedbacks.Server.Errors.psw-reset-token-invalid') })
 
     const hasExpired = new Date(passwordResetToken.expiresAt) < new Date()
 
-    if (hasExpired) throw new TRPCError({ code: 'FORBIDDEN', message: 'Token has expired!' })
+    if (hasExpired) throw new TRPCError({ code: 'FORBIDDEN', message: t('Feedbacks.Server.Errors.psw-reset-token-expired') })
 
     const dbUser = await getUserByEmail(passwordResetToken.email)
 
-    if (!dbUser) throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found!' })
+    if (!dbUser) throw new TRPCError({ code: 'NOT_FOUND', message: t('Feedbacks.Server.Errors.user-not-found') })
 
     const hashedPassword = await bcrypt.hash(password, 10)
 
@@ -170,6 +176,6 @@ export const authRouter = router({
 
     await db.passwordResetToken.delete({ where: { id: passwordResetToken.id } })
 
-    return { success: 'Password reset!' }
+    return { success: true, message: t('Feedbacks.Server.Success.psw-reset') }
   }),
 })
