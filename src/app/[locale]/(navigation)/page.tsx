@@ -1,7 +1,7 @@
-import { auth } from '@/lib/server/auth'
-import { FC } from 'react'
-import { getTranslations } from 'next-intl/server'
 import LogoutBtn from '@/components/LogoutBtn'
+import { auth } from '@/lib/server/auth'
+import { getTranslations } from 'next-intl/server'
+import { FC } from 'react'
 
 interface pageProps {}
 
