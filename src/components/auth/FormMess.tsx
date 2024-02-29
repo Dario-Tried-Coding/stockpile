@@ -3,8 +3,8 @@ import { AlertTriangle, Check } from 'lucide-react'
 import { FC } from 'react'
 
 export interface FormMessProps {
-  message: string | null
-  variant: 'error' | 'success' | null
+  message: string
+  variant: 'error' | 'success'
 }
 
 const FormMess: FC<FormMessProps> = ({ message, variant }) => {

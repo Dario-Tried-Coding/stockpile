@@ -1,6 +1,6 @@
 'use client'
 
-import FormMess from '@/components/auth/FormMess'
+import FormMess, { FormMessProps } from '@/components/auth/FormMess'
 import SocialAuth from '@/components/auth/SocialAuth'
 import { Button } from '@/components/ui/Button'
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/Form'
@@ -8,7 +8,6 @@ import { Input } from '@/components/ui/Input'
 import { Separator } from '@/components/ui/Separator'
 import { CALLBACK_URL } from '@/config/auth.config'
 import useOAuth from '@/hooks/auth/use-OAuth'
-import { useFormMess } from '@/hooks/auth/use-form-mess'
 import { RegisterValidator, TRegisterValidator } from '@/lib/common/validators/auth'
 import { trpc } from '@/lib/server/trpc/trpc'
 import { cn } from '@/lib/utils'
@@ -16,7 +15,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Loader2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useSearchParams } from 'next/navigation'
-import { FC, HTMLAttributes } from 'react'
+import { FC, HTMLAttributes, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 interface RegisterFormProps extends HTMLAttributes<HTMLFormElement> {}
@@ -27,7 +26,7 @@ const RegisterForm: FC<RegisterFormProps> = ({ className, ...rest }) => {
   const searchParams = useSearchParams()
   const callbackUrl = searchParams.get(CALLBACK_URL)
 
-  const [message, setMessage] = useFormMess()
+  const [message, setMessage] = useState<FormMessProps | null>(null)
 
   const { isOAuthLoading, continueWithOAuthProvider } = useOAuth({ callbackUrl })
 

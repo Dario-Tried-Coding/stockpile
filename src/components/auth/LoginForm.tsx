@@ -1,6 +1,6 @@
 'use client'
 
-import FormMess from '@/components/auth/FormMess'
+import FormMess, { FormMessProps } from '@/components/auth/FormMess'
 import SocialAuth from '@/components/auth/SocialAuth'
 import { Button } from '@/components/ui/Button'
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/Form'
@@ -8,7 +8,6 @@ import { Input } from '@/components/ui/Input'
 import { Separator } from '@/components/ui/Separator'
 import { CALLBACK_URL } from '@/config/auth.config'
 import useOAuth from '@/hooks/auth/use-OAuth'
-import { useFormMess } from '@/hooks/auth/use-form-mess'
 import { SignInValidator, TSignInValidator } from '@/lib/common/validators/auth'
 import { trpc } from '@/lib/server/trpc/trpc'
 import { cn } from '@/lib/utils'
@@ -29,9 +28,9 @@ const LoginForm: FC<LoginFormProps> = ({ className, ...rest }) => {
 
   const searchParams = useSearchParams()
   const callbackUrl = searchParams.get(CALLBACK_URL)
-  const urlError = searchParams.get('error') === 'OAuthAccountNotLinked' ? t('OAuth.email-already-in-use') : ''
+  const urlError = searchParams.get('error') === 'OAuthAccountNotLinked' ? t('OAuth.email-already-in-use') : null
 
-  const [message, setMessage] = useFormMess(urlError ? { variant: 'error', message: urlError } : null)
+  const [message, setMessage] = useState<FormMessProps | null>(urlError ? { variant: 'error', message: urlError } : null)
 
   const [show2FA, setShow2FA] = useState(false)
 

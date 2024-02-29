@@ -1,17 +1,16 @@
 'use client'
 
-import FormMess from '@/components/auth/FormMess'
+import FormMess, { FormMessProps } from '@/components/auth/FormMess'
 import { Button } from '@/components/ui/Button'
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/Form'
 import { Input } from '@/components/ui/Input'
-import { useFormMess } from '@/hooks/auth/use-form-mess'
 import { trpc } from '@/lib/server/trpc/trpc'
 import { cn } from '@/lib/utils'
 import { NewPasswordValidator, TNewPasswordValidator } from '@/lib/common/validators/auth'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Loader2 } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
-import { FC, HTMLAttributes } from 'react'
+import { FC, HTMLAttributes, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslations } from 'next-intl'
 
@@ -23,7 +22,7 @@ const NewPasswordForm: FC<NewPasswordFormProps> = ({ className, ...rest }) => {
   const searchParams = useSearchParams()
   const token = searchParams.get('token')
 
-  const [message, setMessage] = useFormMess()
+  const [message, setMessage] = useState<FormMessProps | null>(null)
 
   const form = useForm<TNewPasswordValidator>({
     resolver: zodResolver(NewPasswordValidator),

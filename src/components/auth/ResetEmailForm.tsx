@@ -1,17 +1,16 @@
 'use client'
 
-import FormMess from '@/components/auth/FormMess'
+import FormMess, { FormMessProps } from '@/components/auth/FormMess'
 import { Button } from '@/components/ui/Button'
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/Form'
 import { Input } from '@/components/ui/Input'
-import { useFormMess } from '@/hooks/auth/use-form-mess'
 import { PasswordResetValidator, TPasswordResetValidator } from '@/lib/common/validators/auth'
 import { trpc } from '@/lib/server/trpc/trpc'
 import { cn } from '@/lib/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Loader2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { FC, HTMLAttributes } from 'react'
+import { FC, HTMLAttributes, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 interface ResetEmailFormProps extends HTMLAttributes<HTMLFormElement> {}
@@ -19,7 +18,7 @@ interface ResetEmailFormProps extends HTMLAttributes<HTMLFormElement> {}
 const ResetEmailForm: FC<ResetEmailFormProps> = ({ className, ...rest }) => {
   const t = useTranslations('Auth')
 
-  const [message, setMessage] = useFormMess()
+  const [message, setMessage] = useState<FormMessProps | null>(null)
 
   const form = useForm<TPasswordResetValidator>({
     resolver: zodResolver(PasswordResetValidator),

@@ -8,7 +8,7 @@ const page: FC<pageProps> = ({}) => {
     <AuthPage>
       <AuthPage.Heading text='Credentials.Reset.heading' />
       <AuthPage.Footnote text='Credentials.Reset.footnote' />
-      <AuthPage.Forms.ResetEmail className='mt-6' />
+      <AuthPage.Forms.ResetEmail className='mt-6 w-full' />
       <AuthPage.Policy />
       <AuthPage.Link text='Credentials.Login.back-to-login' href='/auth/login' />
     </AuthPage>
