@@ -14,15 +14,18 @@ export default auth((req) => {
   const isPublicRoute = publicRoutes.some((prefix) => nextUrl.pathname.includes(prefix))
   const isAuthRoute = authRoutes.some((prefix) => nextUrl.pathname.includes(prefix))
 
+  // If it's an API route, we don't need to do anything
   if (isApiAuthRoute) {
     return
   }
 
+  // If it's an auth route, we need to redirect to the homepage if the user is already logged in
   if (isAuthRoute) {
     if (isLoggedIn) return Response.redirect(new URL(`${localePrefix}${DEFAULT_LOGIN_REDIRECT}`, nextUrl))
     return i18nMiddleware(req)
   }
 
+  // If it's a private page and the user is not logged in, redirect to the login page
   if (!isLoggedIn && !isPublicRoute) {
     let callbackUrl = nextUrl.pathname
     if (nextUrl.search) callbackUrl += nextUrl.search
