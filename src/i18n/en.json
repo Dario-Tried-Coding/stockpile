@@ -46,11 +46,11 @@
     "Fields": {
       "Name": {
         "label": "Name",
-        "placeholder": "Mario Rossi"
+        "placeholder": "John Doe"
       },
       "Email": {
         "label": "Email",
-        "placeholder": "mario.rossi@email.com"
+        "placeholder": "john.doe@email.com"
       },
       "Password": {
         "label": "Password",
