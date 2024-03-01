@@ -14,8 +14,8 @@ const layout: FC<layoutProps> = ({ children }) => {
         </Link>
         <p className='text-lg'>Gestione del magazzino per piccole e medie imprese: semplice, efficace, conveniente.</p>
       </div>
-      <div className='flex-1 p-8'>
-        <div className='mx-auto mt-20 flex max-w-sm flex-col items-center text-center lg:mt-40'>
+      <div className='flex-1 p-8 flex justify-center items-center'>
+        <div className='mx-auto flex max-w-sm flex-col items-center text-center pt-20 pb-10'>
           <Link href='/' className='flex items-center gap-4'>
             <Icons.logo className='mb-2 h-14 w-14 fill-primary' />
           </Link>
