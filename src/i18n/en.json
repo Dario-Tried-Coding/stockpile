@@ -66,6 +66,7 @@
       }
     },
     "policy": "By continuing, you accept our <termsLink>Terms of Service</termsLink> and <privacyLink>Privacy Policy</privacyLink>.",
+    "logout": "Log out",
     "Credentials": {
       "Login": {
         "cta": "Log In",
@@ -113,6 +114,22 @@
       "or-continue-with": "OR CONTINUE WITH",
       "Google": "Google",
       "email-already-in-use": "You already have an account with this email address. Please log in."
+    }
+  },
+  "Navbar": {
+    "Links": {
+      "users": "Users",
+      "settings": "Settings"
+    },
+    "Components": {
+      "WorkspaceSwitcher": {
+        "label": "Select a workspace",
+        "placeholder": "Your account",
+        "Search": {
+          "placeholder": "Search workspace...",
+          "no-results": "No workspaces found."
+        }
+      }
     }
   }
 }

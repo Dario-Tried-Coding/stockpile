@@ -66,6 +66,7 @@
       }
     },
     "policy": "Continuando, accetti i nostri <termsLink>Termini di servizio</termsLink> e <privacyLink>l'Informativa sulla privacy</privacyLink>.",
+    "logout": "Esci",
     "Credentials": {
       "Login": {
         "cta": "Accedi",
@@ -113,6 +114,22 @@
       "or-continue-with": "OPPURE CONTINUA CON",
       "Google": "Google",
       "email-already-in-use": "Hai già un account con questa email."
+    }
+  },
+  "Navbar": {
+    "Links": {
+      "users": "Utenti",
+      "settings": "Impostazioni"
+    },
+    "Components": {
+      "WorkspaceSwitcher": {
+        "label": "Seleziona una workspace",
+        "placeholder": "Il tuo account",
+        "Search": {
+          "placeholder": "Cerca workspace...",
+          "no-results": "Nessuna workspace trovata."
+        }
+      }
     }
   }
 }

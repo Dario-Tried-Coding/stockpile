@@ -101,4 +101,7 @@ model Workspace {
   workarea Workarea
 
   users User[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

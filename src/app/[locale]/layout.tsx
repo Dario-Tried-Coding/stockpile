@@ -1,15 +1,15 @@
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import Providers from '@/components/providers/Providers'
+import { Locale } from '@/config/i18n.config'
 import '@/styles/globals.css'
+import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
-import Providers from '@/components/Providers'
-import { NextIntlClientProvider, useMessages } from 'next-intl'
+import { Inter } from 'next/font/google'
 
 const inter = Inter({ subsets: ['latin'] })
 
 type Props = {
   children: React.ReactNode
-  params: { locale: string }
+  params: { locale: Locale }
 }
 
 export async function generateMetadata({ params: { locale } }: Omit<Props, 'children'>) {
@@ -22,14 +22,10 @@ export async function generateMetadata({ params: { locale } }: Omit<Props, 'chil
 }
 
 export default function RootLayout({ children, params: { locale } }: Readonly<Props>) {
-  const messages = useMessages()
-
   return (
     <html lang={locale}>
       <body className={inter.className}>
-        <NextIntlClientProvider locale={locale} messages={messages}>
-          <Providers>{children}</Providers>
-        </NextIntlClientProvider>
+        <Providers locale={locale}>{children}</Providers>
       </body>
     </html>
   )

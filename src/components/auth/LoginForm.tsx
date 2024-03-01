@@ -7,6 +7,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/
 import { Input } from '@/components/ui/Input'
 import { Separator } from '@/components/ui/Separator'
 import { CALLBACK_URL } from '@/config/auth.config'
+import { absoluteUrl } from '@/helpers'
 import useOAuth from '@/hooks/auth/use-OAuth'
 import { SignInValidator, TSignInValidator } from '@/lib/common/validators/auth'
 import { trpc } from '@/lib/server/trpc/trpc'
@@ -15,15 +16,13 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Loader2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import { FC, HTMLAttributes, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 interface LoginFormProps extends HTMLAttributes<HTMLFormElement> {}
 
 const LoginForm: FC<LoginFormProps> = ({ className, ...rest }) => {
-  const router = useRouter()
-
   const t = useTranslations('Auth')
 
   const searchParams = useSearchParams()
@@ -50,7 +49,7 @@ const LoginForm: FC<LoginFormProps> = ({ className, ...rest }) => {
     data,
   } = trpc.auth.signUserIn.useMutation({
     onSuccess(data) {
-      if (data?.redirectUrl) router.push(data.redirectUrl)
+      if (data?.redirectUrl) window.location.href = absoluteUrl(callbackUrl || data.redirectUrl)
       else if (data?.emailConfirmation) setMessage({ message: data.message, variant: 'success' })
       else if (data?.twoFactor) {
         setShow2FA(true)
