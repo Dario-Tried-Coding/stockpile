@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/Button'
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/Form'
 import { Input } from '@/components/ui/Input'
 import { Separator } from '@/components/ui/Separator'
-import { CALLBACK_URL } from '@/config/auth.config'
+import { REDIRECT_URL_PARAM } from '@/config/auth.config'
 import useOAuth from '@/hooks/auth/use-OAuth'
 import { RegisterValidator, TRegisterValidator } from '@/lib/common/validators/auth'
 import { trpc } from '@/lib/server/trpc/trpc'
@@ -23,12 +23,9 @@ interface RegisterFormProps extends HTMLAttributes<HTMLFormElement> {}
 const RegisterForm: FC<RegisterFormProps> = ({ className, ...rest }) => {
   const t = useTranslations('Auth')
 
-  const searchParams = useSearchParams()
-  const callbackUrl = searchParams.get(CALLBACK_URL)
-
   const [message, setMessage] = useState<FormMessProps | null>(null)
 
-  const { isOAuthLoading, continueWithOAuthProvider } = useOAuth({ callbackUrl })
+  const { isOAuthLoading, continueWithOAuthProvider } = useOAuth({})
 
   const form = useForm<TRegisterValidator>({
     resolver: zodResolver(RegisterValidator),

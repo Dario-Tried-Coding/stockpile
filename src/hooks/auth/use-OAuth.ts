@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { toast } from 'sonner'
 
 type Options = {
-  redirectUrl: string | null
+  redirectUrl?: string | null
 }
 
 export default function useOAuth({ redirectUrl }: Options) {
