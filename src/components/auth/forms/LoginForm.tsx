@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/Button'
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/Form'
 import { Input } from '@/components/ui/Input'
 import { Separator } from '@/components/ui/Separator'
-import { CALLBACK_URL } from '@/config/auth.config'
+import { REDIRECT_URL_PARAM } from '@/config/auth.config'
 import { absoluteUrl } from '@/helpers'
 import useOAuth from '@/hooks/auth/use-OAuth'
 import { SignInValidator, TSignInValidator } from '@/lib/common/validators/auth'
@@ -26,7 +26,7 @@ const LoginForm: FC<LoginFormProps> = ({ className, ...rest }) => {
   const t = useTranslations('Auth')
 
   const searchParams = useSearchParams()
-  const callbackUrl = searchParams.get(CALLBACK_URL)
+  const redirectUrl = searchParams.get(REDIRECT_URL_PARAM)
   const urlError = searchParams.get('error') === 'OAuthAccountNotLinked' ? t('OAuth.email-already-in-use') : null
 
   const [message, setMessage] = useState<FormMessProps | null>(urlError ? { variant: 'error', message: urlError } : null)
@@ -49,7 +49,7 @@ const LoginForm: FC<LoginFormProps> = ({ className, ...rest }) => {
     data,
   } = trpc.auth.signUserIn.useMutation({
     onSuccess(data) {
-      if (data?.redirectUrl) window.location.href = absoluteUrl(callbackUrl || data.redirectUrl)
+      if (data?.redirectUrl) window.location.href = absoluteUrl(redirectUrl || data.redirectUrl)
       else if (data?.emailConfirmation) setMessage({ message: data.message, variant: 'success' })
       else if (data?.twoFactor) {
         setShow2FA(true)
@@ -66,7 +66,7 @@ const LoginForm: FC<LoginFormProps> = ({ className, ...rest }) => {
     signUserIn(data)
   })
 
-  const { isOAuthLoading, continueWithOAuthProvider } = useOAuth({ callbackUrl })
+  const { isOAuthLoading, continueWithOAuthProvider } = useOAuth({ redirectUrl })
 
   return (
     <Form {...form}>

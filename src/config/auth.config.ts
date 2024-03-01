@@ -5,7 +5,7 @@ import Credentials from 'next-auth/providers/credentials'
 import Google from 'next-auth/providers/google'
 import bcrypt from 'bcryptjs'
 
-export const CALLBACK_URL = 'callbackUrl' as const
+export const REDIRECT_URL_PARAM = 'redirect-url' as const
 
 export const authConfig = {
   pages: {

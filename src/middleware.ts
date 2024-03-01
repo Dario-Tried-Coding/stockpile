@@ -1,4 +1,4 @@
-import { CALLBACK_URL } from '@/config/auth.config'
+import { REDIRECT_URL_PARAM } from '@/config/auth.config'
 import { DEFAULT_LOGIN_REDIRECT, apiAuthPrefixes, authRoutes, publicRoutes } from '@/config/routes.config'
 import { getLocalePrefix } from '@/helpers'
 import { i18nMiddleware } from '@/lib/common/i18n/middleware'
@@ -26,8 +26,8 @@ export default auth((req) => {
   if (!isLoggedIn && !isPublicRoute) {
     let callbackUrl = nextUrl.pathname
     if (nextUrl.search) callbackUrl += nextUrl.search
-    const encodedCallbackUrl = encodeURIComponent(callbackUrl)
-    return Response.redirect(new URL(`${localePrefix}/auth/login?${CALLBACK_URL}=${encodedCallbackUrl}`, nextUrl))
+    const encodedRedirectUrl = encodeURIComponent(callbackUrl)
+    return Response.redirect(new URL(`${localePrefix}/auth/login?${REDIRECT_URL_PARAM}=${encodedRedirectUrl}`, nextUrl))
   }
 
   return i18nMiddleware(req)
