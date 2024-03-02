@@ -1,6 +1,7 @@
 'use client'
 
 import { buttonVariants } from '@/components/ui/Button'
+import { TOKEN_QUERY_PARAM } from '@/config/auth.config'
 import { trpc } from '@/lib/server/trpc/trpc'
 import { Bug, Loader2, MailCheck } from 'lucide-react'
 import { useTranslations } from 'next-intl'
@@ -14,7 +15,7 @@ const page: FC<pageProps> = ({ }) => {
   const t = useTranslations('Auth')
 
   const searchParams = useSearchParams()
-  const token = searchParams.get('token')
+  const token = searchParams.get(TOKEN_QUERY_PARAM)
 
   if (!token)
     return (

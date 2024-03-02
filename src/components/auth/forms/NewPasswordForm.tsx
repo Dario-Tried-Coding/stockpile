@@ -13,6 +13,7 @@ import { useSearchParams } from 'next/navigation'
 import { FC, HTMLAttributes, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslations } from 'next-intl'
+import { TOKEN_QUERY_PARAM } from '@/config/auth.config'
 
 interface NewPasswordFormProps extends HTMLAttributes<HTMLFormElement> {}
 
@@ -20,7 +21,7 @@ const NewPasswordForm: FC<NewPasswordFormProps> = ({ className, ...rest }) => {
   const t = useTranslations('Auth')
 
   const searchParams = useSearchParams()
-  const token = searchParams.get('token')
+  const token = searchParams.get(TOKEN_QUERY_PARAM)
 
   const [message, setMessage] = useState<FormMessProps | null>(null)
 

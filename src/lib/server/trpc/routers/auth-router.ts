@@ -152,7 +152,7 @@ export const authRouter = router({
   }),
   createNewPassword: publicProcedure.input(NewPasswordValidator).mutation(async ({ input: { password, token }, ctx: { locale } }) => {
     const t = await getTranslations({ locale, namespace: 'Auth' })
-    
+
     if (!token) throw new TRPCError({ code: 'BAD_REQUEST', message: t('Feedbacks.Server.Errors.psw-reset-token-invalid') })
 
     const passwordResetToken = await getPasswordResetTokenByToken(token)

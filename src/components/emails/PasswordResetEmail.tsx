@@ -1,4 +1,5 @@
-import { absoluteUrl } from '@/helpers'
+import { TOKEN_QUERY_PARAM } from '@/config/auth.config'
+import { absoluteUrl } from '@/helpers/routing'
 import { FC } from 'react'
 
 interface PasswordResetEmailProps {
@@ -6,7 +7,7 @@ interface PasswordResetEmailProps {
 }
 
 const PasswordResetEmail: FC<Readonly<PasswordResetEmailProps>> = ({token}) => {
-  const verificationUrl = absoluteUrl(`/auth/new-password?token=${token}`)
+  const verificationUrl = absoluteUrl(`/auth/new-password?${TOKEN_QUERY_PARAM}=${token}`)
 
   return (
     <p>

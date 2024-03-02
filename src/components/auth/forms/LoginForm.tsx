@@ -6,8 +6,8 @@ import { Button } from '@/components/ui/Button'
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/Form'
 import { Input } from '@/components/ui/Input'
 import { Separator } from '@/components/ui/Separator'
-import { REDIRECT_URL_PARAM } from '@/config/auth.config'
-import { absoluteUrl } from '@/helpers'
+import { REDIRECT_URL_QUERY_PARAM } from '@/config/auth.config'
+import { absoluteUrl } from '@/helpers/routing'
 import useOAuth from '@/hooks/auth/use-OAuth'
 import { SignInValidator, TSignInValidator } from '@/lib/common/validators/auth'
 import { trpc } from '@/lib/server/trpc/trpc'
@@ -26,7 +26,7 @@ const LoginForm: FC<LoginFormProps> = ({ className, ...rest }) => {
   const t = useTranslations('Auth')
 
   const searchParams = useSearchParams()
-  const redirectUrl = searchParams.get(REDIRECT_URL_PARAM)
+  const redirectUrl = searchParams.get(REDIRECT_URL_QUERY_PARAM)
   const urlError = searchParams.get('error') === 'OAuthAccountNotLinked' ? t('OAuth.email-already-in-use') : null
 
   const [message, setMessage] = useState<FormMessProps | null>(urlError ? { variant: 'error', message: urlError } : null)

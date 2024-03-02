@@ -1,6 +1,6 @@
-import { REDIRECT_URL_PARAM } from '@/config/auth.config'
+import { REDIRECT_URL_QUERY_PARAM } from '@/config/auth.config'
 import { DEFAULT_LOGIN_REDIRECT, apiAuthPrefixes, authRoutes, publicRoutes } from '@/config/routes.config'
-import { getLocalePrefix } from '@/helpers'
+import { getLocalePrefix, removeLocalePrefix } from '@/helpers/routing'
 import { i18nMiddleware } from '@/lib/common/i18n/middleware'
 import { auth } from '@/lib/server/auth'
 
@@ -21,16 +21,20 @@ export default auth((req) => {
 
   // If it's an auth route, we need to redirect to the homepage if the user is already logged in
   if (isAuthRoute) {
-    if (isLoggedIn) return Response.redirect(new URL(`${localePrefix}${DEFAULT_LOGIN_REDIRECT}`, nextUrl))
+    if (isLoggedIn) {
+      return Response.redirect(new URL(`${localePrefix}${DEFAULT_LOGIN_REDIRECT}`, nextUrl))
+    }
     return i18nMiddleware(req)
   }
 
   // If it's a private page and the user is not logged in, redirect to the login page
   if (!isLoggedIn && !isPublicRoute) {
-    let callbackUrl = nextUrl.pathname
+
+    let callbackUrl = removeLocalePrefix(nextUrl.pathname)
     if (nextUrl.search) callbackUrl += nextUrl.search
     const encodedRedirectUrl = encodeURIComponent(callbackUrl)
-    return Response.redirect(new URL(`${localePrefix}/auth/login?${REDIRECT_URL_PARAM}=${encodedRedirectUrl}`, nextUrl))
+
+    return Response.redirect(new URL(`${localePrefix}/auth/login?${REDIRECT_URL_QUERY_PARAM}=${encodedRedirectUrl}`, nextUrl))
   }
 
   return i18nMiddleware(req)
