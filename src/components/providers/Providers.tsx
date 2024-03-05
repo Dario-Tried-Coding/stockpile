@@ -1,4 +1,5 @@
 import ClientProviders from '@/components/providers/ClientProviders'
+import { Toaster } from '@/components/ui/Sonner'
 import { Locale } from '@/config/i18n.config'
 import { auth } from '@/lib/server/auth'
 import { SessionProvider } from 'next-auth/react'
@@ -17,6 +18,7 @@ const Providers: FC<ProvidersProps> = async ({ children, locale }) => {
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
       <SessionProvider session={session}>
+        <Toaster />
         <ClientProviders>{children}</ClientProviders>
       </SessionProvider>
     </NextIntlClientProvider>

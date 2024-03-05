@@ -5,6 +5,10 @@
       "Errors": {
         "500": "Errore interno del server. Riprova più tardi."
       }
+    },
+    "Roles": {
+      "PRODUCTION": "Produzione",
+      "SHOP": "Negozio"
     }
   },
   "Project": {
@@ -129,6 +133,52 @@
           "placeholder": "Cerca workspace...",
           "no-results": "Nessuna workspace trovata."
         }
+      }
+    }
+  },
+  "Pages": {
+    "Users": {
+      "heading": "Utenti",
+      "sub-heading": "Da qui puoi controllare chi ha accesso alla piattaforma",
+      "Table": {
+        "Headers": {
+          "name": "Nome",
+          "email": "Email",
+          "workareas": "Workarea",
+          "Workspaces": {
+            "header": "Workspace",
+            "Placeholders": {
+              "cta": "Seleziona workspace...",
+              "search": "Cerca workspace...",
+              "empty": "Nessuna workspace",
+              "loading": "Caricamento..."
+            }
+          },
+          "roles": "Ruolo"
+        },
+        "Client": {
+          "Errors": {
+            "User": {
+              "edit-not-found": "L'utente che stai tentando di modificare sembra non esistere. Prova a ricaricare la pagina.",
+              "save-not-found": "L'utente che stai tentando di salvare sembra non esistere. Prova a ricaricare la pagina."  
+            }
+          }
+        },
+        "Server": {
+          "Errors": {
+            "workspace-not-found": "Workspace {id} non trovata."
+          },
+          "Success": {
+            "user-updated": "Utente aggiornato con successo."
+          }
+        }
+      }
+    }
+  },
+  "Toasts": {
+    "Admin": {
+      "UsersTable": {
+        "reload": "Ricarica"
       }
     }
   }
