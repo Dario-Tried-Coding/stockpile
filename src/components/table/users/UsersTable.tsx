@@ -1,5 +1,7 @@
 'use client'
 
+import { TablePagination } from '@/components/table/TablePagination'
+import { TableToolbar } from '@/components/table/users/TableToolbar'
 import { columns } from '@/components/table/users/columns'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/Table'
 import { UsersTableProvider } from '@/context/tables/UsersTableProvider'
@@ -23,7 +25,7 @@ const UsersTable: FC<UsersTableProps> = ({ initialUsers, userType, availableWork
   return (
     <UsersTableProvider context={context}>
       <div className={cn('', className)} {...rest}>
-        {/* <TableToolbar table={table} className='pb-4' /> */}
+        <TableToolbar table={table} className='pb-4' />
         <div className='rounded-md border'>
           <Table>
             <TableHeader>
@@ -54,7 +56,7 @@ const UsersTable: FC<UsersTableProps> = ({ initialUsers, userType, availableWork
             </TableBody>
           </Table>
         </div>
-        {/* <TablePagination table={table} className='mt-4' /> */}
+        <TablePagination table={table} className='mt-4' />
       </div>
     </UsersTableProvider>
   )

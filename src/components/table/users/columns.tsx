@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/Button'
 import { ExtendedTableUser } from '@/lib/utils/tables/users-table'
-import { Workarea } from '@prisma/client'
+import { Workarea, WorkspaceType } from '@prisma/client'
 import { ColumnDef } from '@tanstack/react-table'
 import { ArrowUpDown } from 'lucide-react'
 import { useTranslations } from 'next-intl'
@@ -16,7 +16,7 @@ export const columns: ColumnDef<ExtendedTableUser>[] = [
   {
     accessorKey: 'name',
     header({ column }) {
-      const t = useTranslations('Pages.Users.Table.Headers')
+      const t = useTranslations('Pages.Users.Table.Client.Headers')
       return (
         <Button variant='ghost' onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
           {t('name')}
@@ -28,7 +28,7 @@ export const columns: ColumnDef<ExtendedTableUser>[] = [
   {
     accessorKey: 'email',
     header({ column }) {
-      const t = useTranslations('Pages.Users.Table.Headers')
+      const t = useTranslations('Pages.Users.Table.Client.Headers')
       return (
         <Button variant='ghost' onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
           {t('email')}
@@ -40,14 +40,22 @@ export const columns: ColumnDef<ExtendedTableUser>[] = [
   {
     accessorKey: 'workspaces',
     header() {
-      const t = useTranslations('Pages.Users.Table.Headers.Workspaces')
+      const t = useTranslations('Pages.Users.Table.Client.Headers.Workspaces')
       return t('header')
     },
     accessorFn(row) {
       return row.workspaces.map((w) => w.id).join(', ')
     },
+    filterFn(row, id, value) {
+      const workareaIdsString = row.getValue(id) as string
+      const workareaIds = workareaIdsString.split(', ').filter((id) => id.length > 0)
+
+      const selectedWorkareaIds = value as string[]
+
+      return selectedWorkareaIds.some((id) => workareaIds.includes(id))
+    },
     cell(cell) {
-      const t = useTranslations('Pages.Users.Table.Headers.Workspaces.Placeholders')
+      const t = useTranslations('Pages.Users.Table.Client.Headers.Workspaces.Placeholders')
       const { availableWorkspaces, eventHandlers, getters } = useUsersTableContext()
 
       const selectedWorkspaceIdsString = cell.getValue() as string
@@ -74,11 +82,19 @@ export const columns: ColumnDef<ExtendedTableUser>[] = [
   {
     accessorKey: 'workareas',
     header() {
-      const t = useTranslations('Pages.Users.Table.Headers')
+      const t = useTranslations('Pages.Users.Table.Client.Headers')
       return t('workareas')
     },
     accessorFn(row) {
       return getUniqueValues(row.workspaces.map((w) => w.workarea)).join(', ')
+    },
+    filterFn(row, id, value) {
+      const workareasString = row.getValue(id) as string
+      const workareas = workareasString.split(', ').filter((id) => id.length > 0) as Workarea[]
+
+      const selectedWorkareas = value as Workarea[]
+
+      return selectedWorkareas.some((id) => workareas.includes(id))
     },
     cell({ getValue }) {
       const workareasString = getValue() as string
@@ -89,12 +105,20 @@ export const columns: ColumnDef<ExtendedTableUser>[] = [
   {
     accessorKey: 'roles',
     header() {
-      const t = useTranslations('Pages.Users.Table.Headers')
+      const t = useTranslations('Pages.Users.Table.Client.Headers')
       return t('roles')
     },
     accessorFn(row) {
       const t = useTranslations('Index.Roles')
       return getUniqueValues(row.workspaces.map((w) => t(w.type))).join(', ')
+    },
+    filterFn(row, id, value) {
+      const rolesString = row.getValue(id) as string
+      const roles = rolesString.split(', ').filter((id) => id.length > 0) as WorkspaceType[]
+
+      const selectedRoles = value as WorkspaceType[]
+
+      return selectedRoles.some((id) => roles.includes(id))
     },
     cell({ getValue }) {
       const rolesString = getValue() as string

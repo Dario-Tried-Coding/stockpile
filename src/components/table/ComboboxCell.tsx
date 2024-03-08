@@ -54,7 +54,6 @@ const ComboboxCell: FC<ComboboxCellProps<any>> = ({ cell, options, handleSelect,
             {options ? (
               options.length !== 0 ? (
                 options.map((opt) => {
-                  // console.log('opt: ', opt.label)
                   return (
                   <CommandItem
                     key={opt.id}

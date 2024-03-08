@@ -7,8 +7,8 @@
       }
     },
     "Roles": {
-      "PRODUCTION": "Produzione",
-      "SHOP": "Negozio"
+      "PRODUCTION": "PRODUZIONE",
+      "SHOP": "NEGOZIO"
     }
   },
   "Project": {
@@ -141,26 +141,33 @@
       "heading": "Utenti",
       "sub-heading": "Da qui puoi controllare chi ha accesso alla piattaforma",
       "Table": {
-        "Headers": {
-          "name": "Nome",
-          "email": "Email",
-          "workareas": "Workarea",
-          "Workspaces": {
-            "header": "Workspace",
-            "Placeholders": {
-              "cta": "Seleziona workspace...",
-              "search": "Cerca workspace...",
-              "empty": "Nessuna workspace",
-              "loading": "Caricamento..."
+        "Client": {
+          "Toolbar": {
+            "reset": "Ripristina",
+            "search": "Cerca utente...",
+            "FacetedFilters": {
+              "multiple-selected": "{count} selezionati"
             }
           },
-          "roles": "Ruolo"
-        },
-        "Client": {
+          "Headers": {
+            "name": "Nome",
+            "email": "Email",
+            "workareas": "Workarea",
+            "Workspaces": {
+              "header": "Workspace",
+              "Placeholders": {
+                "cta": "Seleziona workspace...",
+                "search": "Cerca workspace...",
+                "empty": "Nessuna workspace",
+                "loading": "Caricamento..."
+              }
+            },
+            "roles": "Ruolo"
+          },
           "Errors": {
             "User": {
               "edit-not-found": "L'utente che stai tentando di modificare sembra non esistere. Prova a ricaricare la pagina.",
-              "save-not-found": "L'utente che stai tentando di salvare sembra non esistere. Prova a ricaricare la pagina."  
+              "save-not-found": "L'utente che stai tentando di salvare sembra non esistere. Prova a ricaricare la pagina."
             }
           }
         },
