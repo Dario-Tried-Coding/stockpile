@@ -8,11 +8,11 @@ import UsersTable from '@/components/table/users/UsersTable'
 interface pageProps {}
 
 const page: FC<pageProps> = async ({ }) => {
-  await isAdmin()
+  const session = await isAdmin()
 
   const t = await getTranslations('Pages.Users')
 
-  const {assignedUsers, waitingUsers, availableWorkspaces} = await getUsersTableData()
+  const {assignedUsers, waitingUsers, availableWorkspaces} = await getUsersTableData(session.user?.id!)
 
   return (
     <>
@@ -21,19 +21,19 @@ const page: FC<pageProps> = async ({ }) => {
         <p className='text-muted-foreground'>{t('sub-heading')}</p>
       </div>
       <Tabs defaultValue='overview' className='mt-6'>
-          <TabsList>
-            <TabsTrigger value='overview'>Overview</TabsTrigger>
-            <TabsTrigger value='new' disabled={waitingUsers?.length === 0}>
-              Nuovi
-            </TabsTrigger>
-          </TabsList>
-          <TabsContent value='overview'>
-            <UsersTable initialUsers={assignedUsers} userType='assigned' availableWorkspaces={availableWorkspaces} />
-          </TabsContent>
-          <TabsContent value='new'>
-            <UsersTable initialUsers={waitingUsers} userType='waiting' availableWorkspaces={availableWorkspaces} />
-          </TabsContent>
-        </Tabs>
+        <TabsList>
+          <TabsTrigger value='overview'>{t('Table.Client.Tabs.overview')}</TabsTrigger>
+          <TabsTrigger value='new' disabled={waitingUsers?.length === 0}>
+            {t('Table.Client.Tabs.waiting')}
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent value='overview'>
+          <UsersTable initialUsers={assignedUsers} userType='assigned' availableWorkspaces={availableWorkspaces} />
+        </TabsContent>
+        <TabsContent value='new'>
+          <UsersTable initialUsers={waitingUsers} userType='waiting' availableWorkspaces={availableWorkspaces} />
+        </TabsContent>
+      </Tabs>
     </>
   )
 }

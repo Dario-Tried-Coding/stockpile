@@ -1,24 +1,24 @@
 'use client'
 
+import SelectCell from '@/components/table/SelectCell'
+import EditCell from '@/components/table/users/EditCell'
+import { roleIcons } from '@/components/table/users/icons'
+import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
-import { ExtendedTableUser } from '@/lib/utils/tables/users-table'
-import { Workarea, WorkspaceType } from '@prisma/client'
+import { useUsersTableContext } from '@/context/tables/UsersTableProvider'
+import { User, Workarea, WorkspaceType } from '@prisma/client'
 import { ColumnDef } from '@tanstack/react-table'
+import { startCase } from 'lodash'
 import { ArrowUpDown } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { startCase } from 'lodash'
-import EditCell from '@/components/table/users/EditCell'
-import ComboboxCell from '@/components/table/ComboboxCell'
-import { getUniqueValues } from '@/helpers'
-import { useUsersTableContext } from '@/context/tables/UsersTableProvider'
 
-export const columns: ColumnDef<ExtendedTableUser>[] = [
+export const columns: ColumnDef<User>[] = [
   {
     accessorKey: 'name',
     header({ column }) {
       const t = useTranslations('Pages.Users.Table.Client.Headers')
       return (
-        <Button variant='ghost' onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+        <Button variant='ghost' className='-ml-4' onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
           {t('name')}
           <ArrowUpDown className='ml-2 h-4 w-4' />
         </Button>
@@ -30,7 +30,7 @@ export const columns: ColumnDef<ExtendedTableUser>[] = [
     header({ column }) {
       const t = useTranslations('Pages.Users.Table.Client.Headers')
       return (
-        <Button variant='ghost' onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+        <Button variant='ghost' className='-ml-4' onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
           {t('email')}
           <ArrowUpDown className='ml-2 h-4 w-4' />
         </Button>
@@ -38,92 +38,79 @@ export const columns: ColumnDef<ExtendedTableUser>[] = [
     },
   },
   {
-    accessorKey: 'workspaces',
-    header() {
-      const t = useTranslations('Pages.Users.Table.Client.Headers.Workspaces')
-      return t('header')
+    accessorKey: 'workspaceId',
+    header({ column }) {
+      const t = useTranslations('Pages.Users.Table.Client.Headers.Workspace')
+      return (
+        <Button variant='ghost' className='-ml-4' onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+          {t('header')}
+          <ArrowUpDown className='ml-2 h-4 w-4' />
+        </Button>
+      )
     },
-    accessorFn(row) {
-      return row.workspaces.map((w) => w.id).join(', ')
-    },
-    filterFn(row, id, value) {
-      const workareaIdsString = row.getValue(id) as string
-      const workareaIds = workareaIdsString.split(', ').filter((id) => id.length > 0)
-
-      const selectedWorkareaIds = value as string[]
-
-      return selectedWorkareaIds.some((id) => workareaIds.includes(id))
+    filterFn(row, id, values: string[]) {
+      const workspaceId = row.getValue(id) as string
+      return values.includes(workspaceId)
     },
     cell(cell) {
-      const t = useTranslations('Pages.Users.Table.Client.Headers.Workspaces.Placeholders')
+      const t = useTranslations('Pages.Users.Table.Client.Headers.Workspace.Placeholders')
       const { availableWorkspaces, eventHandlers, getters } = useUsersTableContext()
 
-      const selectedWorkspaceIdsString = cell.getValue() as string
-      const selectedWorkspaceIds = selectedWorkspaceIdsString.split(', ').filter((id) => id.length > 0)
+      const workspaceId = cell.getValue() as string | undefined
 
+      const selectedOption = availableWorkspaces.find((w) => w.id === workspaceId)
       const options = availableWorkspaces.map((w) => ({ id: w.id, label: w.name }))
 
       const isInEditMode = getters.isInEditMode(cell.row.original.id)
-      const isLoading = getters.isLoading(cell.row.original.id)
+      const isRowLoading = getters.isLoading(cell.row.original.id)
 
       return (
-        <ComboboxCell
-          selectedIds={selectedWorkspaceIds}
-          options={options}
-          handleSelect={eventHandlers.onUserEdit}
-          editMode={isInEditMode}
-          disabled={isLoading}
-          cell={cell}
-          placeholders={{ cta: t('cta'), empty: t('empty'), search: t('search'), loading: t('loading') }}
-        />
+        <div className='flex items-center gap-2'>
+          {!isInEditMode && <Badge variant='outline'>{selectedOption?.workarea}</Badge>}
+          <SelectCell
+            options={options}
+            value={selectedOption ? { id: selectedOption.id, label: selectedOption.name } : null}
+            onSelect={(value) => eventHandlers.onUserEdit(cell.row.original.id, value)}
+            placeholders={{ select: t('select') }}
+            editMode={isInEditMode}
+            disabled={isRowLoading}
+          />
+        </div>
       )
     },
   },
   {
-    accessorKey: 'workareas',
-    header() {
+    accessorKey: 'role',
+    header({ column }) {
       const t = useTranslations('Pages.Users.Table.Client.Headers')
-      return t('workareas')
+      return (
+        <Button variant='ghost' className='-ml-4' onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+          {t('role')}
+          <ArrowUpDown className='ml-2 h-4 w-4' />
+        </Button>
+      )
     },
     accessorFn(row) {
-      return getUniqueValues(row.workspaces.map((w) => w.workarea)).join(', ')
+      const { availableWorkspaces } = useUsersTableContext()
+      return availableWorkspaces.find((w) => w.id === row.workspaceId)?.type
     },
-    filterFn(row, id, value) {
-      const workareasString = row.getValue(id) as string
-      const workareas = workareasString.split(', ').filter((id) => id.length > 0) as Workarea[]
-
-      const selectedWorkareas = value as Workarea[]
-
-      return selectedWorkareas.some((id) => workareas.includes(id))
+    filterFn(row, id, values: string[]) {
+      const role = row.getValue(id) as WorkspaceType | undefined
+      return values.includes(role || '')
     },
     cell({ getValue }) {
-      const workareasString = getValue() as string
-
-      return startCase(workareasString.toLowerCase()) || '-'
-    },
-  },
-  {
-    accessorKey: 'roles',
-    header() {
-      const t = useTranslations('Pages.Users.Table.Client.Headers')
-      return t('roles')
-    },
-    accessorFn(row) {
+      const role = getValue() as WorkspaceType | undefined
       const t = useTranslations('Index.Roles')
-      return getUniqueValues(row.workspaces.map((w) => t(w.type))).join(', ')
-    },
-    filterFn(row, id, value) {
-      const rolesString = row.getValue(id) as string
-      const roles = rolesString.split(', ').filter((id) => id.length > 0) as WorkspaceType[]
 
-      const selectedRoles = value as WorkspaceType[]
-
-      return selectedRoles.some((id) => roles.includes(id))
-    },
-    cell({ getValue }) {
-      const rolesString = getValue() as string
-
-      return startCase(rolesString.toLowerCase()) || '-'
+      const Icon = roleIcons.find((i) => i.id === role)?.icon
+      return role && Icon ? (
+        <span className='flex items-center gap-1'>
+          <Icon className='w-4 h-4' />
+          {startCase(t(role).toLowerCase())}
+        </span>
+      ) : (
+        '-'
+      )
     },
   },
   {

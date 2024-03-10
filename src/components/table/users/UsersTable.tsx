@@ -8,19 +8,20 @@ import { UsersTableProvider } from '@/context/tables/UsersTableProvider'
 import UseUsersTable from '@/hooks/tables/use-users-table'
 import { TGetUsersValidator } from '@/lib/common/validators/admin/users-table'
 import { cn } from '@/lib/utils'
-import { ExtendedTableUser } from '@/lib/utils/tables/users-table'
-import { Workspace } from '@prisma/client'
+import { AssignedUser, UsersTableWorkspaceInfo, WaitingUser } from '@/lib/utils/tables/users-table'
 import { flexRender } from '@tanstack/react-table'
+import { useTranslations } from 'next-intl'
 import { FC, HTMLAttributes } from 'react'
 
 interface UsersTableProps extends HTMLAttributes<HTMLDivElement> {
-  initialUsers: ExtendedTableUser[]
+  initialUsers: AssignedUser[] | WaitingUser[]
   userType: TGetUsersValidator['userType']
-  availableWorkspaces: ExtendedTableUser['workspaces']
+  availableWorkspaces: UsersTableWorkspaceInfo[]
 }
 
 const UsersTable: FC<UsersTableProps> = ({ initialUsers, userType, availableWorkspaces, className, ...rest }) => {
-  const {table, users, context} = UseUsersTable({ initialUsers, userType, availableWorkspaces })
+  const t = useTranslations('Pages.Users.Table.Client')
+  const { table, users, context } = UseUsersTable({ initialUsers, userType, availableWorkspaces })
 
   return (
     <UsersTableProvider context={context}>
@@ -49,7 +50,7 @@ const UsersTable: FC<UsersTableProps> = ({ initialUsers, userType, availableWork
               ) : (
                 <TableRow>
                   <TableCell colSpan={columns.length} className='h-24 text-center'>
-                    Nessun risultato.
+                    {t('Placeholders.empty')}
                   </TableCell>
                 </TableRow>
               )}
@@ -57,6 +58,8 @@ const UsersTable: FC<UsersTableProps> = ({ initialUsers, userType, availableWork
           </Table>
         </div>
         <TablePagination table={table} className='mt-4' />
+        {/* <pre>{JSON.stringify(users, null, 2)}</pre> */}
+        {/* <pre>{JSON.stringify(table.getState(), null, 2)}</pre> */}
       </div>
     </UsersTableProvider>
   )

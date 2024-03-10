@@ -58,6 +58,7 @@ export const {
       const dbUser = await getUserById(token.sub)
       if (!dbUser) return token
 
+      token.id = dbUser.id
       token.isAdmin = dbUser.isAdmin
       
       return token
@@ -65,6 +66,7 @@ export const {
     async session({ session, token }) {
       if (!session.user) return session
 
+      session.user.id = token.id
       session.user.isAdmin = token.isAdmin
 
       return session

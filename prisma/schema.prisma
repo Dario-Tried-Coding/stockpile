@@ -40,7 +40,8 @@ model User {
   isAccepted Boolean @default(false)
   isAdmin    Boolean @default(false)
 
-  workspaces  Workspace[]
+  workspaceId String?
+  workspace    Workspace? @relation(fields: [workspaceId], references: [id])
 
   accounts      Account[]
 

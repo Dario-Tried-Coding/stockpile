@@ -1,4 +1,4 @@
-import { TableFacetedFilter } from '@/components/table/TableFacetedFilters'
+import { TableFacetedFilter } from '@/components/table/TableFacetedFilter'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { useUsersTableContext } from '@/context/tables/UsersTableProvider'
@@ -29,9 +29,8 @@ export function TableToolbar<TData>({ table, className, ...rest }: TableToolbarP
           <XIcon className='ml-2 h-4 w-4' />
         </Button>
       )}
-      <TableFacetedFilter table={table} accessorKey='workspaces' title={headers_t('Workspaces.header')} options={availableWorkspaces.map(w => ({label: w.name, id: w.id}))} />
-      <TableFacetedFilter table={table} accessorKey='workareas' title={headers_t('workareas')} options={availableWorkareas.map(w => ({label: w, id: w}))} />
-      <TableFacetedFilter table={table} accessorKey='roles' title={headers_t('roles')} options={availableRoles.map(r => ({label: roles_t(r), id: roles_t(r)}))} />
+      <TableFacetedFilter table={table} accessorKey='workspaceId' title={headers_t('Workspace.header')} options={availableWorkspaces.map(w => ({label: w.name, id: w.id}))} />
+      <TableFacetedFilter table={table} accessorKey='role' title={headers_t('role')} options={availableRoles.map(r => ({label: roles_t(r), id: r}))} />
       <Input
         placeholder={toolbar_t('search')}
         value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}

@@ -8,38 +8,21 @@ import { TRPCError } from '@trpc/server'
 import { getTranslations } from 'next-intl/server'
 
 export const adminRouter = router({
-  getUsers: adminProcedure.input(GetUsersValidator).query(async ({ input: { userType }, ctx: { locale } }) => {
-    const {assignedUsers, waitingUsers} = await getTableUsers()
+  getUsers: adminProcedure.input(GetUsersValidator).query(async ({ input: { userType }, ctx: { locale, userId } }) => {
+    const { assignedUsers, waitingUsers } = await getTableUsers(userId!)
     return userType === 'assigned' ? assignedUsers : waitingUsers
   }),
-  updateUser: adminProcedure.input(UpdateUserValidator).mutation(async ({ input: { id, workspaceIds }, ctx: { locale } }) => {
-    const t = await getTranslations({ locale, namespace: 'Pages.Users.Table.Server'})
+  updateUser: adminProcedure.input(UpdateUserValidator).mutation(async ({ input: { id, workspaceId }, ctx: { locale } }) => {
+    const t = await getTranslations({ locale, namespace: 'Pages.Users.Table.Server' })
 
-    const uniqueWorkspaceIds = getUniqueValues(workspaceIds)
-
-    let verifiedWorkspaceIds: string[] = []
-    for (const id of uniqueWorkspaceIds) {
-      const workspace = await getWorkspaceById(id)
-      if (!workspace) throw new TRPCError({ code: 'NOT_FOUND', message: t('Errors.workspace-not-found')})
-      verifiedWorkspaceIds.push(workspace.id)
-    }
+    const workspace = await getWorkspaceById(workspaceId)
+    if (!workspace) throw new TRPCError({ code: 'NOT_FOUND', message: t('Errors.workspace-not-found') })
 
     await db.user.update({
       where: { id },
-      data: {
-        workspaces: { set: [] },
-      },
+      data: { workspaceId },
     })
 
-    await db.user.update({
-      where: { id },
-      data: {
-        workspaces: {
-          connect: [...verifiedWorkspaceIds.map((id) => ({ id }))],
-        }
-      },
-    })
-
-    return { id, message: t('Success.user-updated')}
-  })
+    return { id, message: t('Success.user-updated') }
+  }),
 })

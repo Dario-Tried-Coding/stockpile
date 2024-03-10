@@ -7,6 +7,6 @@ export type TGetUsersValidator = z.infer<typeof GetUsersValidator>
 
 export const UpdateUserValidator = z.object({
   id: z.string(),
-  workspaceIds: z.array(z.string()),
+  workspaceId: z.string(),
 })
 export type TUpdateUserValidator = z.infer<typeof UpdateUserValidator>

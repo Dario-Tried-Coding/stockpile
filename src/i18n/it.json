@@ -143,32 +143,49 @@
       "Table": {
         "Client": {
           "Toolbar": {
-            "reset": "Ripristina",
+            "reset": "Resetta",
             "search": "Cerca utente...",
             "FacetedFilters": {
-              "multiple-selected": "{count} selezionati"
+              "multiple-selected": "{count} selezionati",
+              "no-results": "Nessun risultato trovato."
             }
+          },
+          "Tabs": {
+            "overview": "Panoramica",
+            "waiting": "In attesa"
           },
           "Headers": {
             "name": "Nome",
             "email": "Email",
-            "workareas": "Workarea",
-            "Workspaces": {
+            "workarea": "Workarea",
+            "Workspace": {
               "header": "Workspace",
               "Placeholders": {
-                "cta": "Seleziona workspace...",
-                "search": "Cerca workspace...",
-                "empty": "Nessuna workspace",
-                "loading": "Caricamento..."
+                "select": "Seleziona workspace..."
               }
             },
-            "roles": "Ruolo"
+            "role": "Ruolo"
+          },
+          "Pagination": {
+            "rows-per-page": "Righe per pagina",
+            "page-of": "Pagina {page} di {pages}",
+            "go-to-first": "Vai alla prima pagina",
+            "go-to-last": "Vai all'ultima pagina",
+            "go-to-previous": "Vai alla pagina precedente",
+            "go-to-next": "Vai alla pagina successiva"
           },
           "Errors": {
             "User": {
               "edit-not-found": "L'utente che stai tentando di modificare sembra non esistere. Prova a ricaricare la pagina.",
-              "save-not-found": "L'utente che stai tentando di salvare sembra non esistere. Prova a ricaricare la pagina."
+              "save-not-found": "L'utente che stai tentando di salvare sembra non esistere. Prova a ricaricare la pagina.",
+              "save-without-workspace": "L'utente che stai tentando di salvare sembra non essere assegnato a nessuna workspace. Prova a ricaricare la pagina."
+            },
+            "Workspace": {
+              "edit-not-found": "La workspace che hai tentato di selezionare sembra non esistere. Prova a ricaricare la pagina."
             }
+          },
+          "Placeholders": {
+            "empty": "Nessun utente trovato."
           }
         },
         "Server": {

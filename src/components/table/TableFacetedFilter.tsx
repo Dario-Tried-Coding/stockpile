@@ -4,7 +4,7 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, Command
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover'
 import { Separator } from '@/components/ui/Separator'
 import { cn } from '@/lib/utils'
-import { Column, Table } from '@tanstack/react-table'
+import { Table } from '@tanstack/react-table'
 import { capitalize } from 'lodash'
 import { Check, PlusCircle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
@@ -21,11 +21,10 @@ type TableFacetedFilterProps<TData> = {
 }
 
 export function TableFacetedFilter<TData>({ table, title, accessorKey, options }: TableFacetedFilterProps<TData>) {
-  const t = useTranslations('Pages.Users.Table.Client.Toolbar.FacetedFilters')
-
+  const t = useTranslations('Pages.Users.Table.Client.Toolbar')
   const column = table.getColumn(accessorKey)
 
-  // const facets = column?.getFacetedUniqueValues()
+  const facets = column?.getFacetedUniqueValues()
   const selectedValues = new Set(column?.getFilterValue() as string[])
 
   if (!column) return null
@@ -45,7 +44,7 @@ export function TableFacetedFilter<TData>({ table, title, accessorKey, options }
               <div className='hidden space-x-1 lg:flex'>
                 {selectedValues.size > 2 ? (
                   <Badge variant='secondary' className='rounded-sm px-1 font-normal'>
-                    {selectedValues.size} selezionati
+                    {t('FacetedFilters.multiple-selected', { count: selectedValues.size })}
                   </Badge>
                 ) : (
                   options
@@ -65,7 +64,7 @@ export function TableFacetedFilter<TData>({ table, title, accessorKey, options }
         <Command>
           <CommandInput placeholder={title} />
           <CommandList>
-            <CommandEmpty>No results found.</CommandEmpty>
+            <CommandEmpty>{t('FacetedFilters.no-results')}</CommandEmpty>
             <CommandGroup>
               {options.map((option) => {
                 const isSelected = selectedValues.has(option.id)
@@ -92,11 +91,11 @@ export function TableFacetedFilter<TData>({ table, title, accessorKey, options }
                     </div>
                     {option.icon && <option.icon className='mr-2 h-4 w-4 text-muted-foreground' />}
                     <span className='capitalize'>{option.label.toLowerCase()}</span>
-                    {/* {facets && sumValuesFromMap(facets, option.id) && (
+                    {facets && sumValuesFromMap(facets, option.id) && (
                       <span className='ml-auto flex h-4 w-4 items-center justify-center font-mono text-xs'>
                         {sumValuesFromMap(facets, option.id)}
                       </span>
-                    )} */}
+                    )}
                   </CommandItem>
                 )
               })}
@@ -106,7 +105,7 @@ export function TableFacetedFilter<TData>({ table, title, accessorKey, options }
                 <CommandSeparator />
                 <CommandGroup>
                   <CommandItem onSelect={() => column?.setFilterValue(undefined)} className='justify-center text-center'>
-                    Resetta filtri
+                    {t('reset')}
                   </CommandItem>
                 </CommandGroup>
               </>

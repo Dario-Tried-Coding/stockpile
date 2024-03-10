@@ -5,8 +5,8 @@ import { getUniqueValues } from '@/helpers'
 import { useCustomToasts } from '@/hooks/use-custom-toasts'
 import { TGetUsersValidator } from '@/lib/common/validators/admin/users-table'
 import { trpc } from '@/lib/server/trpc/trpc'
-import { ExtendedTableUser } from '@/lib/utils/tables/users-table'
-import { Workspace } from '@prisma/client'
+import { AssignedUser, UsersTableWorkspaceInfo, WaitingUser } from '@/lib/utils/tables/users-table'
+import { User } from '@prisma/client'
 import {
   ColumnFiltersState,
   SortingState,
@@ -25,8 +25,8 @@ import { toast } from 'sonner'
 
 interface UseUsersTableProps {
   userType: TGetUsersValidator['userType']
-  initialUsers: ExtendedTableUser[]
-  availableWorkspaces: ExtendedTableUser['workspaces']
+  initialUsers: User[]
+  availableWorkspaces: UsersTableWorkspaceInfo[]
 }
 
 const UseUsersTable = ({ userType, initialUsers, availableWorkspaces }: UseUsersTableProps) => {
@@ -34,10 +34,10 @@ const UseUsersTable = ({ userType, initialUsers, availableWorkspaces }: UseUsers
   const { tableClientErrorToast } = useCustomToasts()
 
   // data --------------------------------------------------------------------
-  const [users, setUsers] = useState<ExtendedTableUser[]>(initialUsers)
+  const [users, setUsers] = useState<User[]>(initialUsers)
 
   // query -------------------------------------------------------------------
-  const { data } = trpc.admin.getUsers.useQuery({ userType }, { initialData: initialUsers })
+  const { data } = trpc.admin.getUsers.useQuery({ userType }, { initialData: initialUsers as WaitingUser[] | AssignedUser[] })
   useEffect(() => setUsers(data), [data])
 
   // states ------------------------------------------------------------------
@@ -46,7 +46,7 @@ const UseUsersTable = ({ userType, initialUsers, availableWorkspaces }: UseUsers
 
   const [inEditMode, setInEditMode] = useState<string[]>([])
   const [loading, setLoading] = useState<string[]>([])
-  const [originalUsers, setOriginalUsers] = useState<ExtendedTableUser[]>([])
+  const [originalUsers, setOriginalUsers] = useState<User[]>([])
   const [inError, setInError] = useState<string[]>([])
 
   // available options --------------------------------------------------------
@@ -58,7 +58,7 @@ const UseUsersTable = ({ userType, initialUsers, availableWorkspaces }: UseUsers
     const user = users.find((u) => u.id === id)
     return user
   }
-  const updateUser = (user: ExtendedTableUser) => {
+  const updateUser = (user: User) => {
     setUsers((prev) => prev.map((u) => (u.id === user.id ? user : u)))
   }
 
@@ -136,7 +136,11 @@ const UseUsersTable = ({ userType, initialUsers, availableWorkspaces }: UseUsers
       return
     }
 
-    saveMod({ id: user.id, workspaceIds: user.workspaces.map((w) => w.id) })
+    if (!user.workspaceId) {
+      tableClientErrorToast(t('Errors.User.save-without-workspace'))
+    }
+
+    saveMod({ id: user.id, workspaceId: user.workspaceId as AssignedUser['workspaceId'] })
   }
 
   const editUser = (id: string) => {
@@ -147,20 +151,19 @@ const UseUsersTable = ({ userType, initialUsers, availableWorkspaces }: UseUsers
 
   // events ------------------------------------------------------------------
   const onUserEdit = (id: string, workspaceId: string) => {
-    const currentWorkspace = availableWorkspaces.find((w) => w.id === workspaceId)
-    // TODO: add i18n message
-    if (!currentWorkspace) return
+    const selectedWorkspace = availableWorkspaces.find((w) => w.id === workspaceId)
+    
+    if (!selectedWorkspace) {
+      tableClientErrorToast(t('Errors.Workspace.edit-not-found'))
+      return
+    }
 
     setUsers((prev) =>
       prev.map((u) => {
         const isRightUser = u.id === id
-        
+
         if (!isRightUser) return u
-
-        const isWorkspaceAssigned = u.workspaces.some((w) => w.id === workspaceId)
-        const workspaces = isWorkspaceAssigned ? u.workspaces.filter((w) => w.id !== workspaceId) : [...u.workspaces, currentWorkspace]
-
-        return { ...u, workspaces }
+        return { ...u, workspaceId }
       })
     )
   }

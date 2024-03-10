@@ -1,11 +1,11 @@
 import { Button } from '@/components/ui/Button'
 import { useUsersTableContext } from '@/context/tables/UsersTableProvider'
-import { ExtendedTableUser } from '@/lib/utils/tables/users-table'
+import { User } from '@prisma/client'
 import { CellContext } from '@tanstack/react-table'
 import { AlertTriangle, Check, Loader2, Pencil, XIcon } from 'lucide-react'
 import { FC } from 'react'
 
-interface EditCellProps extends CellContext<ExtendedTableUser, unknown> {}
+interface EditCellProps extends CellContext<User, unknown> {}
 
 const EditCell: FC<EditCellProps> = ({ row }) => {
   const id = row.original.id
@@ -17,7 +17,7 @@ const EditCell: FC<EditCellProps> = ({ row }) => {
   const isUserDirty = getters.isUserDirty(id)
   const isInErrorState = getters.isInErrorState(id)
 
-  const isValid = !!row.original.workspaces.length
+  const isValid = !!row.original.workspaceId
 
   return isInEditMode ? (
     <div className='flex items-center gap-1'>
