@@ -5,15 +5,19 @@
       "Errors": {
         "500": "Internal server error. Please try again later."
       }
+    },
+    "Roles": {
+      "PRODUCTION": "PRODUCTION",
+      "SHOP": "SHOP"
     }
   },
   "Project": {
     "Marketing": {
       "name": "Stockpile",
-      "slogan": "Warehouse management for small and medium-sized businesses: simple, effective, affordable."
+      "slogan": "Warehouse management for small and medium businesses: simple, effective, affordable."
     },
     "Metadata": {
-      "title": "Stockpile | Warehouse Management System",
+      "title": "Stockpile | Warehouse Management",
       "description": "Stockpile is a warehouse management system for small businesses."
     }
   },
@@ -21,7 +25,7 @@
     "Feedbacks": {
       "Client": {
         "Errors": {
-          "confirm-password": "Make sure passwords match."
+          "confirm-password": "Make sure the passwords match."
         }
       },
       "Server": {
@@ -32,25 +36,25 @@
           "wrong-credentials": "Incorrect email or password. Please verify and try again.",
           "2fa-token-invalid": "Invalid verification code. Please verify and try again.",
           "2fa-token-expired": "Verification code expired. Request a new code.",
-          "psw-reset-token-invalid": "Unable to create a new password. Invalid token.",
-          "psw-reset-token-expired": "Unable to create a new password. Token expired."
+          "psw-reset-token-invalid": "Unable to create new password. Invalid token.",
+          "psw-reset-token-expired": "Unable to create new password. Token expired."
         },
         "Success": {
           "confirmation-email-sent": "Confirmation email sent. Check your inbox.",
           "reset-email-sent": "Email sent. Check your inbox.",
           "2FA-email-sent": "Verification code sent. Check your inbox.",
-          "psw-reset": "Password successfully reset."
+          "psw-reset": "Password reset successfully."
         }
       }
     },
     "Fields": {
       "Name": {
         "label": "Name",
-        "placeholder": "John Doe"
+        "placeholder": "Mario Rossi"
       },
       "Email": {
         "label": "Email",
-        "placeholder": "john.doe@email.com"
+        "placeholder": "mario.rossi@email.com"
       },
       "Password": {
         "label": "Password",
@@ -66,12 +70,12 @@
       }
     },
     "policy": "By continuing, you accept our <termsLink>Terms of Service</termsLink> and <privacyLink>Privacy Policy</privacyLink>.",
-    "logout": "Log out",
+    "logout": "Logout",
     "Credentials": {
       "Login": {
         "cta": "Log In",
         "cta-extended": "Log in to your account",
-        "footnote": "Enter your credentials to access the account",
+        "footnote": "Enter your credentials to access your account",
         "back-to-login": "Back to login",
         "wait": "Please wait..."
       },
@@ -81,13 +85,13 @@
         "footnote": "Enter the required credentials to create your account"
       },
       "Reset": {
-        "heading": "Forgot your password?",
-        "footnote": "Enter the email address you used to create your account, and we'll send you a link to reset it.",
+        "heading": "Forgot Password?",
+        "footnote": "Enter the email address you used to create your account and we'll send you a link to reset it.",
         "link": "Forgot your password?",
         "send": "Send email"
       },
       "NewPassword": {
-        "heading": "Create new password",
+        "heading": "Create New Password",
         "footnote": "Enter and confirm the new password you want to set for your account.",
         "cta": "Create new password"
       },
@@ -105,7 +109,7 @@
         },
         "ContactSupport": {
           "error": "If the issue persists, please contact support.",
-          "success": "For any questions, please contact our support team."
+          "success": "For any questions, contact our support team."
         },
         "do-not-close-window": "This may take a few moments. Please do not close the page."
       }
@@ -113,7 +117,7 @@
     "OAuth": {
       "or-continue-with": "OR CONTINUE WITH",
       "Google": "Google",
-      "email-already-in-use": "You already have an account with this email address. Please log in."
+      "email-already-in-use": "You already have an account with this email."
     }
   },
   "Navbar": {
@@ -127,8 +131,94 @@
         "placeholder": "Your account",
         "Search": {
           "placeholder": "Search workspace...",
-          "no-results": "No workspaces found."
+          "no-results": "No workspace found."
         }
+      }
+    }
+  },
+  "Pages": {
+    "Users": {
+      "heading": "Users",
+      "sub-heading": "Here you can manage who has access to the platform",
+      "Table": {
+        "Client": {
+          "Toolbar": {
+            "reset": "Reset",
+            "search": "Search user...",
+            "FacetedFilters": {
+              "multiple-selected": "{count} selected",
+              "no-results": "No results found."
+            }
+          },
+          "Tabs": {
+            "overview": "Overview",
+            "waiting": "Waiting"
+          },
+          "Headers": {
+            "name": "Name",
+            "email": "Email",
+            "workarea": "Workarea",
+            "Workspace": {
+              "header": "Workspace",
+              "Placeholders": {
+                "select": "Select workspace..."
+              }
+            },
+            "role": "Role"
+          },
+          "Actions": {
+            "open-menu": "Open menu",
+            "edit": "Edit",
+            "Delete": {
+              "label": "Delete",
+              "Confirmation": {
+                "heading": "You are deleting {user}",
+                "sub-heading": "This action will permanently delete the user from the platform.",
+                "revert": "Cancel"
+              }
+            }
+          },
+          "Pagination": {
+            "rows-per-page": "Rows per page",
+            "page-of": "Page {page} of {pages}",
+            "go-to-first": "Go to first page",
+            "go-to-last": "Go to last page",
+            "go-to-previous": "Go to previous page",
+            "go-to-next": "Go to next page"
+          },
+          "Errors": {
+            "User": {
+              "edit-not-found": "The user you are trying to edit seems to not exist. Please try refreshing the page.",
+              "save-not-found": "The user you are trying to save seems to not exist. Please try refreshing the page.",
+              "save-without-workspace": "The user you are trying to save seems not to be assigned to any workspace. Please try refreshing the page."
+            },
+            "Workspace": {
+              "edit-not-found": "The workspace you tried to select seems not to exist. Please try refreshing the page."
+            }
+          },
+          "Placeholders": {
+            "empty": "No users found."
+          }
+        },
+        "Server": {
+          "Errors": {
+            "workspace-not-found": "Workspace {id} not found.",
+            "delete-self": "You cannot delete your own account.",
+            "user-not-found": "User {id} not found."
+          },
+          "Success": {
+            "user-updated": "User updated successfully.",
+            "users-deleted": "Users deleted successfully.",
+            "user-deleted": "User deleted successfully."
+          }
+        }
+      }
+    }
+  },
+  "Toasts": {
+    "Admin": {
+      "UsersTable": {
+        "reload": "Reload"
       }
     }
   }
