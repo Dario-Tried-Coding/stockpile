@@ -1,11 +1,14 @@
 'use client'
 
 import SelectCell from '@/components/table/SelectCell'
+import ActionsCell from '@/components/table/users/ActionsCell'
 import EditCell from '@/components/table/users/EditCell'
 import { roleIcons } from '@/components/table/users/icons'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
+import { Checkbox } from '@/components/ui/checkbox'
 import { useUsersTableContext } from '@/context/tables/UsersTableProvider'
+import { getHotkeyHandler } from '@mantine/hooks'
 import { User, Workarea, WorkspaceType } from '@prisma/client'
 import { ColumnDef } from '@tanstack/react-table'
 import { startCase } from 'lodash'
@@ -13,6 +16,29 @@ import { ArrowUpDown } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 
 export const columns: ColumnDef<User>[] = [
+  {
+    id: 'select',
+    header({ table }) {
+      return (
+        <Checkbox
+          checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')}
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label='Select all'
+          className='translate-y-[2px]'
+        />
+      )
+    },
+    cell({ row }) {
+      return (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label='Select row'
+          className='translate-y-[2px]'
+        />
+      )
+    }
+  },
   {
     accessorKey: 'name',
     header({ column }) {
@@ -66,7 +92,7 @@ export const columns: ColumnDef<User>[] = [
 
       return (
         <div className='flex items-center gap-2'>
-          {!isInEditMode && <Badge variant='outline'>{selectedOption?.workarea}</Badge>}
+          {!isInEditMode && selectedOption && <Badge variant='outline'>{selectedOption?.workarea}</Badge>}
           <SelectCell
             options={options}
             value={selectedOption ? { id: selectedOption.id, label: selectedOption.name } : null}
@@ -115,6 +141,13 @@ export const columns: ColumnDef<User>[] = [
   },
   {
     id: 'edit',
-    cell: EditCell,
+    cell(props) {
+      const id = props.row.original.id
+      const {getters} = useUsersTableContext()
+
+      const isInEditMode = getters.isInEditMode(id)
+
+      return isInEditMode ? <EditCell {...props} /> : <ActionsCell {...props} />
+    }
   },
 ]

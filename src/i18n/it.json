@@ -166,6 +166,18 @@
             },
             "role": "Ruolo"
           },
+          "Actions": {
+            "open-menu": "Apri menu",
+            "edit": "Modifica",
+            "Delete": {
+              "label": "Elimina",
+              "Confirmation": {
+                "heading": "Stai eliminando {user}",
+                "sub-heading": "Questa azione andrà ad eliminare irrevocabilmente l'utente dalla piattaforma.",
+                "revert": "Annulla"
+              }
+            }
+          },
           "Pagination": {
             "rows-per-page": "Righe per pagina",
             "page-of": "Pagina {page} di {pages}",
@@ -190,10 +202,14 @@
         },
         "Server": {
           "Errors": {
-            "workspace-not-found": "Workspace {id} non trovata."
+            "workspace-not-found": "Workspace {id} non trovata.",
+            "delete-self": "Non puoi eliminare il tuo account.",
+            "user-not-found": "Utente {id} non trovato."
           },
           "Success": {
-            "user-updated": "Utente aggiornato con successo."
+            "user-updated": "Utente aggiornato con successo.",
+            "users-deleted": "Utenti eliminati con successo.",
+            "user-deleted": "Utente eliminato con successo."
           }
         }
       }
