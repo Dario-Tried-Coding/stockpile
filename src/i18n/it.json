@@ -148,6 +148,10 @@
             "FacetedFilters": {
               "multiple-selected": "{count} selezionati",
               "no-results": "Nessun risultato trovato."
+            },
+            "ViewOptions": {
+              "button": "Mostra",
+              "label": "Mostra colonne"
             }
           },
           "Tabs": {
