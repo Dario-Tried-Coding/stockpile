@@ -1,5 +1,6 @@
 import { TableFacetedFilter } from '@/components/table/TableFacetedFilter'
 import TableViewOptions from '@/components/table/TableViewOptions'
+import ActionsButton from '@/components/table/users/ActionsButton'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { cn } from '@/lib/utils'
@@ -53,8 +54,9 @@ export function TableToolbar<TData>({ table, className, ...rest }: TableToolbarP
           <XIcon className='ml-2 h-4 w-4' />
         </Button>
       )}
-      <div className='ml-auto'>
+      <div className='ml-auto flex items-center gap-2'>
         <TableViewOptions table={table} />
+        <ActionsButton table={table} />
       </div>
     </div>
   )

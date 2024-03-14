@@ -15,7 +15,7 @@ function TableViewOptions<TData>({ table }: TableViewOptionsProps<TData>) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant='outline' size='sm' className='ml-auto hidden h-8 lg:flex'>
+        <Button variant='outline' size='sm' className='h-8'>
           <Settings2 className='mr-2 h-4 w-4' />
           {t('button')}
         </Button>
