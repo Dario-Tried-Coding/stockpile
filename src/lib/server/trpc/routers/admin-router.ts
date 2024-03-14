@@ -54,6 +54,6 @@ export const adminRouter = router({
 
     await db.user.deleteMany({ where: { id: { in: sanitizedIds } } })
 
-    return { ids: sanitizedIds, message: t('Success.users-deleted') }
+    return { ids: sanitizedIds, message: t('Success.users-deleted', { count: sanitizedIds.length }) }
   }),
 })

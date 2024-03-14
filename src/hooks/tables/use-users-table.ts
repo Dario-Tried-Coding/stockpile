@@ -44,11 +44,12 @@ const UseUsersTable = ({ userType, initialUsers, availableWorkspaces }: UseUsers
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
-    workarea: false
+    workarea: false,
   })
 
   const [inEditMode, setInEditMode] = useState<string[]>([])
   const [loading, setLoading] = useState<string[]>([])
+  const [deleting, setDeleting] = useState<string[]>([])
   const [originalUsers, setOriginalUsers] = useState<ExtendedUser[]>([])
   const [inError, setInError] = useState<string[]>([])
 
@@ -92,6 +93,9 @@ const UseUsersTable = ({ userType, initialUsers, availableWorkspaces }: UseUsers
   const putInLoadingState = (id: string) => setLoading((prev) => (prev.includes(id) ? prev : [...prev, id]))
   const removeFromLoadingState = (id: string) => setLoading((prev) => prev.filter((_id) => _id !== id))
 
+  const putInDeletingState = (id: string) => setDeleting((prev) => (prev.includes(id) ? prev : [...prev, id]))
+  const removeFromDeletingState = (id: string) => setDeleting((prev) => prev.filter((_id) => _id !== id))
+
   const putInErrorState = (id: string) => setInError((prev) => (prev.includes(id) ? prev : [...prev, id]))
   const removeFromErrorState = (id: string) => setInError((prev) => prev.filter((_id) => _id !== id))
 
@@ -131,10 +135,30 @@ const UseUsersTable = ({ userType, initialUsers, availableWorkspaces }: UseUsers
     },
     onMutate({ id }) {
       removeFromErrorState(id)
-      putInLoadingState(id)
+      putInDeletingState(id)
     },
     onSettled(_, __, { id }) {
-      removeFromLoadingState(id)
+      removeFromDeletingState(id)
+    },
+  })
+
+  const { mutate: deleteUsersMtn } = trpc.admin.deleteUsers.useMutation({
+    onSuccess({ ids, message }) {
+      toast.success(message)
+      ids.forEach((id) => deleteUserInstance(id))
+      ids.forEach((id) => removeFromEditMode(id))
+      utils.admin.getUsers.invalidate()
+    },
+    onError({ message }, { ids }) {
+      ids.forEach((id) => putInErrorState(id))
+      toast.error(message)
+    },
+    onMutate({ ids }) {
+      ids.forEach((id) => removeFromErrorState(id))
+      ids.forEach((id) => putInDeletingState(id))
+    },
+    onSettled(_, __, { ids }) {
+      ids.forEach((id) => removeFromDeletingState(id))
     },
   })
 
@@ -173,6 +197,7 @@ const UseUsersTable = ({ userType, initialUsers, availableWorkspaces }: UseUsers
   }
 
   const deleteUser = (id: string) => deleteUserMtn({ id })
+  const deleteUsers = (ids: string[], options?: { onSuccess?: () => void }) => deleteUsersMtn({ ids }, { onSuccess: options?.onSuccess })
 
   // events ------------------------------------------------------------------
   const onUserEdit = (id: string, workspaceId: string) => {
@@ -196,6 +221,7 @@ const UseUsersTable = ({ userType, initialUsers, availableWorkspaces }: UseUsers
   // state checkers -----------------------------------------------------------
   const isInEditMode = (id: string) => inEditMode.includes(id)
   const isLoading = (id: string) => loading.includes(id)
+  const isDeleting = (id: string) => deleting.includes(id)
   const isUserDirty = (id: string) => !lodash.isEqual(getUser(id), getUserInstance(id))
   const isInErrorState = (id: string) => inError.includes(id)
 
@@ -229,6 +255,7 @@ const UseUsersTable = ({ userType, initialUsers, availableWorkspaces }: UseUsers
           saveUser,
           editUser,
           deleteUser,
+          deleteUsers,
         },
         eventHandlers: {
           onUserEdit,
@@ -236,6 +263,7 @@ const UseUsersTable = ({ userType, initialUsers, availableWorkspaces }: UseUsers
         getters: {
           isInEditMode,
           isLoading,
+          isDeleting,
           isUserDirty,
           isInErrorState,
         },

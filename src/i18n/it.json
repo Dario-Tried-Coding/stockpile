@@ -212,7 +212,7 @@
           },
           "Success": {
             "user-updated": "Utente aggiornato con successo.",
-            "users-deleted": "Utenti eliminati con successo.",
+            "users-deleted": "{count, plural, =1 {Eliminato} other {Eliminati}} con successo {count, plural, =1 {un utente} other {# utenti}}.",
             "user-deleted": "Utente eliminato con successo."
           }
         }

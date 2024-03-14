@@ -31,7 +31,7 @@ const page: FC<pageProps> = async ({ }) => {
       <TabsContent value='overview' className='mt-8'>
         <UsersTable initialUsers={assignedUsers} userType='assigned' availableWorkspaces={availableWorkspaces} />
       </TabsContent>
-      <TabsContent value='new'>
+      <TabsContent value='new' className='mt-8'>
         <UsersTable initialUsers={waitingUsers} userType='waiting' availableWorkspaces={availableWorkspaces} />
       </TabsContent>
     </Tabs>

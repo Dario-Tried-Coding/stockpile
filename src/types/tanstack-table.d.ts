@@ -20,6 +20,12 @@ declare module '@tanstack/table-core' {
         saveUser: (id: string) => void
         editUser: (id: string) => void
         deleteUser: (id: string) => void
+        deleteUsers: (
+          ids: string[],
+          options?: {
+            onSuccess?: () => void
+          }
+        ) => void
       }
       eventHandlers: {
         onUserEdit: (id: string, workspaceId: string) => void
@@ -27,6 +33,7 @@ declare module '@tanstack/table-core' {
       getters: {
         isInEditMode: (id: string) => boolean
         isLoading: (id: string) => boolean
+        isDeleting: (id: string) => boolean
         isUserDirty: (id: string) => boolean
         isInErrorState: (id: string) => boolean
       }
