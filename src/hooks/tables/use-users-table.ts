@@ -5,11 +5,11 @@ import { getUniqueValues } from '@/helpers'
 import { useCustomToasts } from '@/hooks/use-custom-toasts'
 import { TGetUsersValidator } from '@/lib/common/validators/admin/users-table'
 import { trpc } from '@/lib/server/trpc/trpc'
-import { AssignedUser, UsersTableWorkspaceInfo, WaitingUser } from '@/lib/utils/tables/users-table'
-import { User } from '@prisma/client'
+import { AssignedUser, UsersTableExtendedUser as ExtendedUser, UsersTableWorkspaceInfo, WaitingUser } from '@/lib/utils/tables/users-table'
 import {
   ColumnFiltersState,
   SortingState,
+  VisibilityState,
   getCoreRowModel,
   getFacetedRowModel,
   getFacetedUniqueValues,
@@ -25,7 +25,7 @@ import { toast } from 'sonner'
 
 interface UseUsersTableProps {
   userType: TGetUsersValidator['userType']
-  initialUsers: User[]
+  initialUsers: ExtendedUser[]
   availableWorkspaces: UsersTableWorkspaceInfo[]
 }
 
@@ -34,7 +34,7 @@ const UseUsersTable = ({ userType, initialUsers, availableWorkspaces }: UseUsers
   const { tableClientErrorToast } = useCustomToasts()
 
   // data --------------------------------------------------------------------
-  const [users, setUsers] = useState<User[]>(initialUsers)
+  const [users, setUsers] = useState<ExtendedUser[]>(initialUsers)
 
   // query -------------------------------------------------------------------
   const { data } = trpc.admin.getUsers.useQuery({ userType }, { initialData: initialUsers as WaitingUser[] | AssignedUser[] })
@@ -43,10 +43,13 @@ const UseUsersTable = ({ userType, initialUsers, availableWorkspaces }: UseUsers
   // states ------------------------------------------------------------------
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
+    workarea: false
+  })
 
   const [inEditMode, setInEditMode] = useState<string[]>([])
   const [loading, setLoading] = useState<string[]>([])
-  const [originalUsers, setOriginalUsers] = useState<User[]>([])
+  const [originalUsers, setOriginalUsers] = useState<ExtendedUser[]>([])
   const [inError, setInError] = useState<string[]>([])
 
   // available options --------------------------------------------------------
@@ -58,7 +61,7 @@ const UseUsersTable = ({ userType, initialUsers, availableWorkspaces }: UseUsers
     const user = users.find((u) => u.id === id)
     return user
   }
-  const updateUser = (user: User) => {
+  const updateUser = (user: ExtendedUser) => {
     setUsers((prev) => prev.map((u) => (u.id === user.id ? user : u)))
   }
 
@@ -115,6 +118,26 @@ const UseUsersTable = ({ userType, initialUsers, availableWorkspaces }: UseUsers
     },
   })
 
+  const { mutate: deleteUserMtn } = trpc.admin.deleteUser.useMutation({
+    onSuccess({ id, message }) {
+      toast.success(message)
+      deleteUserInstance(id)
+      removeFromEditMode(id)
+      utils.admin.getUsers.invalidate()
+    },
+    onError({ message }, { id }) {
+      putInErrorState(id)
+      toast.error(message)
+    },
+    onMutate({ id }) {
+      removeFromErrorState(id)
+      putInLoadingState(id)
+    },
+    onSettled(_, __, { id }) {
+      removeFromLoadingState(id)
+    },
+  })
+
   // actions -----------------------------------------------------------------
   const revertUser = (id: string) => {
     const userInstance = deleteUserInstance(id)
@@ -149,10 +172,12 @@ const UseUsersTable = ({ userType, initialUsers, availableWorkspaces }: UseUsers
     putInEditMode(id)
   }
 
+  const deleteUser = (id: string) => deleteUserMtn({ id })
+
   // events ------------------------------------------------------------------
   const onUserEdit = (id: string, workspaceId: string) => {
     const selectedWorkspace = availableWorkspaces.find((w) => w.id === workspaceId)
-    
+
     if (!selectedWorkspace) {
       tableClientErrorToast(t('Errors.Workspace.edit-not-found'))
       return
@@ -163,7 +188,7 @@ const UseUsersTable = ({ userType, initialUsers, availableWorkspaces }: UseUsers
         const isRightUser = u.id === id
 
         if (!isRightUser) return u
-        return { ...u, workspaceId }
+        return { ...u, workspaceId: selectedWorkspace.id, workspaceType: selectedWorkspace.type, workarea: selectedWorkspace.workarea }
       })
     )
   }
@@ -178,46 +203,47 @@ const UseUsersTable = ({ userType, initialUsers, availableWorkspaces }: UseUsers
   const table = useReactTable({
     data: users,
     columns,
-    state: { sorting, columnFilters },
+    state: { sorting, columnFilters, columnVisibility },
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
+    onColumnVisibilityChange: setColumnVisibility,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-  })
-
-  return {
-    table,
-    users,
-    context: {
-      availableWorkspaces,
-      availableWorkareas,
-      availableRoles,
-      setters: {
-        editMode: {
-          putInEditMode,
-          removeFromEditMode,
+    meta: {
+      usersTable: {
+        availableWorkspaces,
+        availableWorkareas,
+        availableRoles,
+        setters: {
+          editMode: {
+            putInEditMode,
+            removeFromEditMode,
+          },
+        },
+        actions: {
+          revertUser,
+          saveUser,
+          editUser,
+          deleteUser,
+        },
+        eventHandlers: {
+          onUserEdit,
+        },
+        getters: {
+          isInEditMode,
+          isLoading,
+          isUserDirty,
+          isInErrorState,
         },
       },
-      actions: {
-        revertUser,
-        saveUser,
-        editUser,
-      },
-      eventHandlers: {
-        onUserEdit,
-      },
-      getters: {
-        isInEditMode,
-        isLoading,
-        isUserDirty,
-        isInErrorState,
-      },
     },
-  }
+  })
+
+  return { table, users }
 }
 
 export default UseUsersTable
