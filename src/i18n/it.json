@@ -171,13 +171,18 @@
             "role": "Ruolo"
           },
           "Actions": {
+            "label": "Azioni",
             "open-menu": "Apri menu",
             "edit": "Modifica",
+            "save-mods": "Salva modifiche",
+            "revert-mods": "Annulla modifiche",
+            "accept": "Accetta",
             "Delete": {
               "label": "Elimina",
               "Confirmation": {
                 "heading": "Stai eliminando {user}",
-                "sub-heading": "Questa azione andrà ad eliminare irrevocabilmente l'utente dalla piattaforma.",
+                "heading-multiple": "Stai eliminando {count} utenti",
+                "sub-heading": "Questa azione andrà ad eliminare irrevocabilmente {count, plural, =1 {un utente} other {# utenti}} dalla piattaforma.",
                 "revert": "Annulla"
               }
             }

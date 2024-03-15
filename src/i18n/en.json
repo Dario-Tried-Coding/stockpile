@@ -31,8 +31,8 @@
       "Server": {
         "Errors": {
           "user-not-found": "User not found.",
-          "email-not-usable": "Email not usable. Try with another email.",
-          "email-not-found": "Email address not found. Please verify and try again.",
+          "email-not-usable": "Email not usable. Please try another email.",
+          "email-not-found": "Email address not found. Please check and try again.",
           "wrong-credentials": "Incorrect email or password. Please verify and try again.",
           "2fa-token-invalid": "Invalid verification code. Please verify and try again.",
           "2fa-token-expired": "Verification code expired. Request a new code.",
@@ -40,9 +40,9 @@
           "psw-reset-token-expired": "Unable to create new password. Token expired."
         },
         "Success": {
-          "confirmation-email-sent": "Confirmation email sent. Check your inbox.",
-          "reset-email-sent": "Email sent. Check your inbox.",
-          "2FA-email-sent": "Verification code sent. Check your inbox.",
+          "confirmation-email-sent": "Confirmation email sent. Please check your inbox.",
+          "reset-email-sent": "Email sent. Please check your inbox.",
+          "2FA-email-sent": "Verification code sent. Please check your inbox.",
           "psw-reset": "Password reset successfully."
         }
       }
@@ -75,7 +75,7 @@
       "Login": {
         "cta": "Log In",
         "cta-extended": "Log in to your account",
-        "footnote": "Enter your credentials to access your account",
+        "footnote": "Enter your credentials to access the account",
         "back-to-login": "Back to login",
         "wait": "Please wait..."
       },
@@ -86,7 +86,7 @@
       },
       "Reset": {
         "heading": "Forgot Password?",
-        "footnote": "Enter the email address you used to create your account and we'll send you a link to reset it.",
+        "footnote": "Enter the email address you used to create your account, and we'll send you a link to reset it.",
         "link": "Forgot your password?",
         "send": "Send email"
       },
@@ -108,8 +108,8 @@
           "pending": "Please wait while we verify your email."
         },
         "ContactSupport": {
-          "error": "If the issue persists, please contact support.",
-          "success": "For any questions, contact our support team."
+          "error": "If the problem persists, please contact support.",
+          "success": "For any queries, contact our support team."
         },
         "do-not-close-window": "This may take a few moments. Please do not close the page."
       }
@@ -139,7 +139,7 @@
   "Pages": {
     "Users": {
       "heading": "Users",
-      "sub-heading": "Here you can manage who has access to the platform",
+      "sub-heading": "From here you can manage who has access to the platform",
       "Table": {
         "Client": {
           "Toolbar": {
@@ -148,6 +148,10 @@
             "FacetedFilters": {
               "multiple-selected": "{count} selected",
               "no-results": "No results found."
+            },
+            "ViewOptions": {
+              "button": "Show",
+              "label": "Show columns"
             }
           },
           "Tabs": {
@@ -167,13 +171,18 @@
             "role": "Role"
           },
           "Actions": {
+            "label": "Actions",
             "open-menu": "Open menu",
             "edit": "Edit",
+            "save-mods": "Save changes",
+            "revert-mods": "Revert changes",
+            "accept": "Accept",
             "Delete": {
               "label": "Delete",
               "Confirmation": {
                 "heading": "You are deleting {user}",
-                "sub-heading": "This action will permanently delete the user from the platform.",
+                "heading-multiple": "You are deleting {count} users",
+                "sub-heading": "This action will permanently delete {count, plural, =1 {one user} other {# users}} from the platform.",
                 "revert": "Cancel"
               }
             }
@@ -188,12 +197,12 @@
           },
           "Errors": {
             "User": {
-              "edit-not-found": "The user you are trying to edit seems to not exist. Please try refreshing the page.",
-              "save-not-found": "The user you are trying to save seems to not exist. Please try refreshing the page.",
-              "save-without-workspace": "The user you are trying to save seems not to be assigned to any workspace. Please try refreshing the page."
+              "edit-not-found": "The user you are trying to edit seems to not exist. Try reloading the page.",
+              "save-not-found": "The user you are trying to save seems to not exist. Try reloading the page.",
+              "save-without-workspace": "The user you are trying to save seems to not be assigned to any workspace. Try reloading the page."
             },
             "Workspace": {
-              "edit-not-found": "The workspace you tried to select seems not to exist. Please try refreshing the page."
+              "edit-not-found": "The workspace you tried to select seems to not exist. Try reloading the page."
             }
           },
           "Placeholders": {
@@ -208,7 +217,7 @@
           },
           "Success": {
             "user-updated": "User updated successfully.",
-            "users-deleted": "Users deleted successfully.",
+            "users-deleted": "{count, plural, =1 {Deleted} other {Deleted}} successfully {count, plural, =1 {one user} other {# users}}.",
             "user-deleted": "User deleted successfully."
           }
         }

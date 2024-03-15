@@ -42,9 +42,12 @@ const ActionsCell: FC<ActionsCellProps> = ({ row, table }) => {
 
   // actions
   const deleteUser = () => {
-    tableCtx?.actions.deleteUser(id)
-    closeDialog()
-    closeDropdown()
+    tableCtx?.actions.deleteUser(id, {
+      onSuccess() {
+        closeDialog()
+        closeDropdown()
+      },
+    })
   }
 
   // hotkeys handler
@@ -61,9 +64,11 @@ const ActionsCell: FC<ActionsCellProps> = ({ row, table }) => {
             disabled={isLoading || !isAssigned || isDeleting}
           >
             {isLoading ? <Loader2 className='h-4 w-4 animate-spin' /> : <Check className='h-4 w-4' />}
+            <span className='sr-only'>{t('save-mods')}</span>
           </Button>
           <Button variant='outline' onClick={() => tableCtx?.actions.revertUser(id)} size='icon' disabled={isLoading || isDeleting}>
             <X className='h-4 w-4' />
+            <span className='sr-only'>{t('revert-mods')}</span>
           </Button>
           {isInErrorState && <AlertTriangle className='inline h-6 w-6 text-destructive-foreground' />}
         </div>
@@ -71,9 +76,11 @@ const ActionsCell: FC<ActionsCellProps> = ({ row, table }) => {
         <div className='flex items-center gap-1'>
           <Button variant='outline' size='icon' onClick={() => tableCtx?.actions.editUser(id)} disabled={isDeleting || dialogOpen}>
             <Check className='h-4 w-4' />
+            <span className='sr-only'>{t('accept')}</span>
           </Button>
           <Button variant='outline' size='icon' onClick={() => openDialog()} disabled={isDeleting || dialogOpen}>
             {isDeleting ? <Loader2 className='h-4 w-4 animate-spin' /> : <X className='h-4 w-4' />}
+            <span className='sr-only'>{t('Delete.label')}</span>
           </Button>
           {isInErrorState && <AlertTriangle className='inline h-6 w-6 text-destructive-foreground' />}
         </div>
@@ -105,7 +112,7 @@ const ActionsCell: FC<ActionsCellProps> = ({ row, table }) => {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{t('Delete.Confirmation.heading', { user: row.original.name })}</DialogTitle>
-          <DialogDescription>{t('Delete.Confirmation.sub-heading')}</DialogDescription>
+          <DialogDescription>{t('Delete.Confirmation.sub-heading', { count: 1 })}</DialogDescription>
         </DialogHeader>
         <DialogFooter>
           <DialogClose asChild>

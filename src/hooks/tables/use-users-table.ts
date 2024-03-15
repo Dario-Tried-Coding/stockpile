@@ -196,7 +196,7 @@ const UseUsersTable = ({ userType, initialUsers, availableWorkspaces }: UseUsers
     putInEditMode(id)
   }
 
-  const deleteUser = (id: string) => deleteUserMtn({ id })
+  const deleteUser = (id: string, options?: { onSuccess?: () => void }) => deleteUserMtn({ id }, { onSuccess: options?.onSuccess })
   const deleteUsers = (ids: string[], options?: { onSuccess?: () => void }) => deleteUsersMtn({ ids }, { onSuccess: options?.onSuccess })
 
   // events ------------------------------------------------------------------

@@ -19,7 +19,12 @@ declare module '@tanstack/table-core' {
         revertUser: (id: string) => void
         saveUser: (id: string) => void
         editUser: (id: string) => void
-        deleteUser: (id: string) => void
+        deleteUser: (
+          id: string,
+          options?: {
+            onSuccess?: () => void
+          }
+        ) => void
         deleteUsers: (
           ids: string[],
           options?: {

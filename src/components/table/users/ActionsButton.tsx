@@ -5,6 +5,7 @@ import { UsersTableExtendedUser as ExtendedUser } from '@/lib/utils/tables/users
 import { getHotkeyHandler } from '@mantine/hooks'
 import { Table } from '@tanstack/react-table'
 import { Ellipsis, Loader2 } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { useState } from 'react'
 
 interface ActionsButtonProps<TData> {
@@ -12,6 +13,7 @@ interface ActionsButtonProps<TData> {
 }
 
 function ActionsButton<TData extends ExtendedUser>({ table }: ActionsButtonProps<TData>) {
+  const t = useTranslations('Pages.Users.Table.Client.Actions')
   const tableCtx = table.options.meta?.usersTable
 
   // ui state
@@ -26,7 +28,7 @@ function ActionsButton<TData extends ExtendedUser>({ table }: ActionsButtonProps
   const selectedRows = table.getFilteredSelectedRowModel().rows
   const areRowsSelected = selectedRows.length > 0
 
-  const isDeleting = selectedRows.some(row => tableCtx?.getters.isDeleting(row.original.id))
+  const isDeleting = selectedRows.some((row) => tableCtx?.getters.isDeleting(row.original.id))
 
   // actions
   const deleteUsers = async () => {
@@ -50,6 +52,7 @@ function ActionsButton<TData extends ExtendedUser>({ table }: ActionsButtonProps
         <DropdownMenuTrigger asChild>
           <Button variant='outline' size='icon' className='h-8 w-8'>
             <Ellipsis className='h-4 w-4' />
+            <span className='sr-only'>{t('label')}</span>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align='end' onKeyDown={handleHotkeys}>
@@ -60,7 +63,7 @@ function ActionsButton<TData extends ExtendedUser>({ table }: ActionsButtonProps
           >
             <DialogTrigger asChild>
               <span className='flex w-full items-center justify-between'>
-                Elimina
+                {t('Delete.label')}
                 <DropdownMenuShortcut>{isDeleting ? <Loader2 className='h-4 w-4 animate-spin' /> : '⌘D'}</DropdownMenuShortcut>
               </span>
             </DialogTrigger>
@@ -69,17 +72,21 @@ function ActionsButton<TData extends ExtendedUser>({ table }: ActionsButtonProps
       </DropdownMenu>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Stai eliminando {selectedRows.length} utenti dalla piattaforma</DialogTitle>
-          <DialogDescription>Questa azione non è reversibile.</DialogDescription>
+          <DialogTitle>
+            {selectedRows.length === 1
+              ? t('Delete.Confirmation.heading', { user: selectedRows[0].original.name })
+              : t('Delete.Confirmation.heading-multiple', { count: selectedRows.length })}
+          </DialogTitle>
+          <DialogDescription>{t('Delete.Confirmation.sub-heading', {count: selectedRows.length})}</DialogDescription>
         </DialogHeader>
         <DialogFooter>
           <DialogClose asChild>
             <Button type='button' variant='secondary' disabled={isDeleting}>
-              Annulla
+              {t('Delete.Confirmation.revert')}
             </Button>
           </DialogClose>
           <Button type='button' onClick={deleteUsers} disabled={isDeleting}>
-            {isDeleting ? <Loader2 className='h-4 w-4 animate-spin' /> : 'Elimina'}
+            {isDeleting ? <Loader2 className='h-4 w-4 animate-spin' /> : t('Delete.label')}
           </Button>
         </DialogFooter>
       </DialogContent>
