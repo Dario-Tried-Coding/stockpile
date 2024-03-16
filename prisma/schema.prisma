@@ -37,7 +37,6 @@ model User {
   isTwoFactorEnabled    Boolean                @default(false)
   twoFactorConfirmation TwoFactorConfirmation?
 
-  isAccepted Boolean @default(false)
   isAdmin    Boolean @default(false)
 
   workspaceId String?
