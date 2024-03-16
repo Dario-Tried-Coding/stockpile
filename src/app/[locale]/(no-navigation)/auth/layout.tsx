@@ -1,4 +1,4 @@
-import { Icons } from '@/components/Icons'
+import { Icons } from '@/components/icons/Icons'
 import Link from 'next/link'
 import { FC, PropsWithChildren } from 'react'
 
@@ -14,8 +14,8 @@ const layout: FC<layoutProps> = ({ children }) => {
         </Link>
         <p className='text-lg'>Gestione del magazzino per piccole e medie imprese: semplice, efficace, conveniente.</p>
       </div>
-      <div className='flex-1 p-8 flex justify-center items-center'>
-        <div className='mx-auto flex max-w-sm flex-col items-center text-center pt-20 pb-10'>
+      <div className='flex flex-1 items-center justify-center p-8'>
+        <div className='mx-auto flex max-w-sm flex-col items-center pb-10 pt-20 text-center'>
           <Link href='/' className='flex items-center gap-4'>
             <Icons.logo className='mb-2 h-14 w-14 fill-primary' />
           </Link>

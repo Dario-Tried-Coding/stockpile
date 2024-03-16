@@ -1,12 +1,14 @@
+import { workspaceIcons } from '@/components/icons/WorkspaceIcons'
 import { Avatar, AvatarFallback } from '@/components/ui/Avatar'
 import { Button } from '@/components/ui/Button'
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/Command'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover'
+import { useWorkspace } from '@/context/WorkspaceProvider'
 import { trpc } from '@/lib/server/trpc/trpc'
 import { cn } from '@/lib/utils'
 import { Workarea, Workspace } from '@prisma/client'
 import lodash from 'lodash'
-import { ChevronsUpDown } from 'lucide-react'
+import { Check, ChevronsUpDown } from 'lucide-react'
 import { User } from 'next-auth'
 import { useTranslations } from 'next-intl'
 import { ComponentPropsWithoutRef, FC, useState } from 'react'
@@ -17,9 +19,9 @@ interface WorkspaceSwitcherProps extends ComponentPropsWithoutRef<typeof Popover
 
 const WorkspaceSwitcher: FC<WorkspaceSwitcherProps> = ({ className, user, ...rest }) => {
   const t = useTranslations('Navbar.Components.WorkspaceSwitcher')
+  const {workspace, setWorkspace} = useWorkspace()
 
   const [open, setOpen] = useState(false)
-  const [workspace, setWorkspace] = useState<Workspace | null>(null)
 
   const { data: workspaces } = trpc.getWorkspaces.useQuery()
   const organizedWorkspaces = workspaces?.reduce(
@@ -34,24 +36,26 @@ const WorkspaceSwitcher: FC<WorkspaceSwitcherProps> = ({ className, user, ...res
     {} as Record<Workarea, typeof workspaces>
   )
 
+  const WorkspaceIcon = workspaceIcons.find((icon) => icon.id === workspace?.type)!
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild {...rest}>
-        <Button
-          variant='outline'
-          role='combobox'
-          aria-expanded={open}
-          aria-label={t('label')}
-          className={cn('w-[200px] justify-between', className)}
-        >
+        <Button variant='outline' role='combobox' aria-expanded={open} aria-label={t('label')} className={cn('w-[250px] justify-between', className)}>
           <Avatar className='mr-2 h-5 w-5'>
-            <AvatarFallback className='bg-gradient-to-br from-primary-700 to-primary-300' />
+            {workspace ? (
+              <AvatarFallback>
+                <WorkspaceIcon.icon className='h-4 w-4' />
+              </AvatarFallback>
+            ) : (
+              <AvatarFallback className='bg-gradient-to-br from-primary-700 to-primary-300' />
+            )}
           </Avatar>
           <span className='mr-2 truncate'>{workspace?.name ?? user?.name ?? t('placeholder')}</span>
           <ChevronsUpDown className='ml-auto h-4 w-4 shrink-0 opacity-50' />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className='w-[200px] p-0'>
+      <PopoverContent className='w-[250px] p-0'>
         <Command>
           <CommandList>
             <CommandInput placeholder={t('Search.placeholder')} />
@@ -73,21 +77,28 @@ const WorkspaceSwitcher: FC<WorkspaceSwitcherProps> = ({ className, user, ...res
             {organizedWorkspaces &&
               Object.entries(organizedWorkspaces).map(([areaName, workspaces]) => (
                 <CommandGroup key={areaName} heading={lodash.capitalize(lodash.lowerCase(areaName))}>
-                  {workspaces.map((workspace) => (
-                    <CommandItem
-                      key={workspace.id}
-                      onSelect={() => {
-                        setWorkspace(workspace)
-                        setOpen(false)
-                      }}
-                      className='text-sm'
-                    >
-                      <Avatar className='mr-2 h-5 w-5'>
-                        <AvatarFallback className='bg-gradient-to-br from-primary-700 to-primary-300' />
-                      </Avatar>
-                      <span className='truncate'>{workspace.name}</span>
-                    </CommandItem>
-                  ))}
+                  {workspaces.map((w) => {
+                    const Icon = workspaceIcons.find((icon) => icon.id === w.type)!
+
+                    return (
+                      <CommandItem
+                        key={w.id}
+                        onSelect={() => {
+                          setWorkspace(w)
+                          setOpen(false)
+                        }}
+                        className='text-sm'
+                      >
+                        <Avatar className='mr-2 h-5 w-5'>
+                          <AvatarFallback>
+                            <Icon.icon className='h-4 w-4' />
+                          </AvatarFallback>
+                        </Avatar>
+                        <span className='truncate'>{w.name}</span>
+                        {w.id === workspace?.id && <Check className='ml-auto h-4 w-4' />}
+                      </CommandItem>
+                    )
+                  })}
                 </CommandGroup>
               ))}
           </CommandList>

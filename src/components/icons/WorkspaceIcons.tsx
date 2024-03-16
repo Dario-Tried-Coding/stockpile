@@ -1,12 +1,12 @@
 import { WorkspaceType } from "@prisma/client";
 import { LucideIcon, Store, Warehouse } from "lucide-react";
 
-type RoleIcon = {
+type WorkspaceIcon = {
   id: WorkspaceType
   icon: LucideIcon
 }
 
-export const roleIcons: RoleIcon[] = [
+export const workspaceIcons: WorkspaceIcon[] = [
   {
     id: 'SHOP',
     icon: Store,

@@ -2,7 +2,7 @@
 
 import SelectCell from '@/components/table/SelectCell'
 import ActionsCell from '@/components/table/users/ActionsCell'
-import { roleIcons } from '@/components/table/users/icons'
+import { workspaceIcons as roleIcons } from '@/components/icons/WorkspaceIcons'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { Checkbox } from '@/components/ui/checkbox'

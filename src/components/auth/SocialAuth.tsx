@@ -1,4 +1,4 @@
-import { Icons } from '@/components/Icons'
+import { Icons } from '@/components/icons/Icons'
 import { Button } from '@/components/ui/Button'
 import { cn } from '@/lib/utils'
 import { Loader2 } from 'lucide-react'
@@ -16,7 +16,13 @@ const SocialAuth: FC<SocialAuthProps> = ({ isLoading, disabled, continueWithProv
 
   return (
     <div className={cn('flex flex-col', className)} {...rest}>
-      <Button className='gap-1' variant='outline' onClick={() => continueWithProvider('google')} type='button' disabled={disabled || (isLoading !== null && isLoading !== 'google')}>
+      <Button
+        className='gap-1'
+        variant='outline'
+        onClick={() => continueWithProvider('google')}
+        type='button'
+        disabled={disabled || (isLoading !== null && isLoading !== 'google')}
+      >
         {isLoading === 'google' ? <Loader2 className='h-4 w-4 animate-spin' /> : <Icons.google className='h-4 w-4' />} <span>{t('Google')}</span>
       </Button>
     </div>
