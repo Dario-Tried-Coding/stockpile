@@ -60,6 +60,7 @@ export const {
 
       token.id = dbUser.id
       token.isAdmin = dbUser.isAdmin
+      token.workspaceId = dbUser.workspaceId
       
       return token
     },
@@ -68,6 +69,7 @@ export const {
 
       session.user.id = token.id
       session.user.isAdmin = token.isAdmin
+      session.user.workspaceId = token.workspaceId
 
       return session
     },

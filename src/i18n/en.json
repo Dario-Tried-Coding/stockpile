@@ -31,7 +31,7 @@
       "Server": {
         "Errors": {
           "user-not-found": "User not found.",
-          "email-not-usable": "Email not usable. Please try another email.",
+          "email-not-usable": "Email not usable. Try another email.",
           "email-not-found": "Email address not found. Please check and try again.",
           "wrong-credentials": "Incorrect email or password. Please verify and try again.",
           "2fa-token-invalid": "Invalid verification code. Please verify and try again.",
@@ -40,9 +40,9 @@
           "psw-reset-token-expired": "Unable to create new password. Token expired."
         },
         "Success": {
-          "confirmation-email-sent": "Confirmation email sent. Please check your inbox.",
-          "reset-email-sent": "Email sent. Please check your inbox.",
-          "2FA-email-sent": "Verification code sent. Please check your inbox.",
+          "confirmation-email-sent": "Confirmation email sent. Check your inbox.",
+          "reset-email-sent": "Email sent. Check your inbox.",
+          "2FA-email-sent": "Verification code sent. Check your inbox.",
           "psw-reset": "Password reset successfully."
         }
       }
@@ -73,8 +73,8 @@
     "logout": "Logout",
     "Credentials": {
       "Login": {
-        "cta": "Log In",
-        "cta-extended": "Log in to your account",
+        "cta": "Login",
+        "cta-extended": "Login to your account",
         "footnote": "Enter your credentials to access the account",
         "back-to-login": "Back to login",
         "wait": "Please wait..."
@@ -86,14 +86,14 @@
       },
       "Reset": {
         "heading": "Forgot Password?",
-        "footnote": "Enter the email address you used to create your account, and we'll send you a link to reset it.",
+        "footnote": "Enter the email address you used to create your account and we'll send you a link to reset it.",
         "link": "Forgot your password?",
         "send": "Send email"
       },
       "NewPassword": {
         "heading": "Create New Password",
         "footnote": "Enter and confirm the new password you want to set for your account.",
-        "cta": "Create new password"
+        "cta": "Create New Password"
       },
       "Verify": {
         "Heading": {
@@ -109,7 +109,7 @@
         },
         "ContactSupport": {
           "error": "If the problem persists, please contact support.",
-          "success": "For any queries, contact our support team."
+          "success": "For any questions, contact our support team."
         },
         "do-not-close-window": "This may take a few moments. Please do not close the page."
       }
@@ -118,6 +118,11 @@
       "or-continue-with": "OR CONTINUE WITH",
       "Google": "Google",
       "email-already-in-use": "You already have an account with this email."
+    },
+    "Wait": {
+      "heading": "Limited Access",
+      "sub-heading": "Your account is pending verification. Please wait.",
+      "contact-support": "For any questions, contact our support team."
     }
   },
   "Navbar": {
@@ -139,7 +144,7 @@
   "Pages": {
     "Users": {
       "heading": "Users",
-      "sub-heading": "From here you can manage who has access to the platform",
+      "sub-heading": "Here you can manage who has access to the platform",
       "Table": {
         "Client": {
           "Toolbar": {
@@ -175,7 +180,7 @@
             "open-menu": "Open menu",
             "edit": "Edit",
             "save-mods": "Save changes",
-            "revert-mods": "Revert changes",
+            "revert-mods": "Undo changes",
             "accept": "Accept",
             "Delete": {
               "label": "Delete",
@@ -199,10 +204,10 @@
             "User": {
               "edit-not-found": "The user you are trying to edit seems to not exist. Try reloading the page.",
               "save-not-found": "The user you are trying to save seems to not exist. Try reloading the page.",
-              "save-without-workspace": "The user you are trying to save seems to not be assigned to any workspace. Try reloading the page."
+              "save-without-workspace": "The user you are trying to save seems not to be assigned to any workspace. Try reloading the page."
             },
             "Workspace": {
-              "edit-not-found": "The workspace you tried to select seems to not exist. Try reloading the page."
+              "edit-not-found": "The workspace you attempted to select seems to not exist. Try reloading the page."
             }
           },
           "Placeholders": {

@@ -118,6 +118,11 @@
       "or-continue-with": "OPPURE CONTINUA CON",
       "Google": "Google",
       "email-already-in-use": "Hai già un account con questa email."
+    },
+    "Wait": {
+      "heading": "Accesso limitato",
+      "sub-heading": "Il tuo account è in attesa di verifica. Per favore attendi.",
+      "contact-support": "Per qualsiasi dubbio contatta il nostro team di supporto."
     }
   },
   "Navbar": {

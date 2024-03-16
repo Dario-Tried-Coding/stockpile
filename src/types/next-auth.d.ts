@@ -5,6 +5,7 @@ declare module '@auth/core/jwt' {
   interface JWT {
     id: string
     isAdmin: boolean
+    workspaceId: string | null
   }
 }
 
@@ -12,5 +13,6 @@ declare module '@auth/core/types' {
   interface User {
     id: string
     isAdmin: boolean
+    workspaceId: string | null
   }
 }

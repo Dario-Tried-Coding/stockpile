@@ -1,10 +1,14 @@
 import { logout } from '@/actions/logout'
-import { FC } from 'react'
+import { Button } from '@/components/ui/Button'
+import { cn } from '@/lib/utils'
+import { useTranslations } from 'next-intl'
+import { FC, HTMLAttributes } from 'react'
 
-interface LogoutBtnProps {}
+interface LogoutBtnProps extends HTMLAttributes<HTMLButtonElement> {}
 
-const LogoutBtn: FC<LogoutBtnProps> = ({ }) => {
-  return <form action={logout}><button type='submit'>Esci</button></form>
+const LogoutBtn: FC<LogoutBtnProps> = ({ className, ...rest }) => {
+  const t = useTranslations('Auth')
+  return <form action={logout}><Button variant='ghost' type='submit' className={cn('', className)} {...rest}>{t('logout')}</Button></form>
 }
 
 export default LogoutBtn
