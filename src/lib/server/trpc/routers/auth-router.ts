@@ -113,18 +113,20 @@ export const authRouter = router({
       }
     }
   }),
-  verifyEmail: publicProcedure.input(z.object({ token: z.string() })).query(async ({ input: { token } }) => {
+  verifyEmail: publicProcedure.input(z.object({ token: z.string() })).query(async ({ input: { token }, ctx: { locale } }) => {
+    const t = await getTranslations({ locale, namespace: 'Auth.Feedbacks.Server' })
+
     const verificationToken = await getVerificationTokenByToken(token)
 
-    if (!verificationToken) throw new TRPCError({ code: 'NOT_FOUND', message: 'Token not found!' })
+    if (!verificationToken) throw new TRPCError({ code: 'NOT_FOUND', message: t('Errors.2fa-token-invalid') })
 
     const hasExpired = new Date(verificationToken.expiresAt) < new Date()
 
-    if (hasExpired) throw new TRPCError({ code: 'FORBIDDEN', message: 'Token has expired!' })
+    if (hasExpired) throw new TRPCError({ code: 'FORBIDDEN', message: t('Errors.2fa-token-expired') })
 
     const dbUser = await getUserByEmail(verificationToken.email)
 
-    if (!dbUser) throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found!' })
+    if (!dbUser) throw new TRPCError({ code: 'NOT_FOUND', message: t('Errors.user-not-found') })
 
     await db.user.update({
       where: { id: dbUser.id },
@@ -136,10 +138,10 @@ export const authRouter = router({
 
     await db.verificationToken.delete({ where: { id: verificationToken.id } })
 
-    return { success: 'Email verified!' }
+    return { message: t('Success.email-verified') }
   }),
   sendResetPasswordEmail: publicProcedure.input(PasswordResetValidator).mutation(async ({ input: { email }, ctx: { locale } }) => {
-    const t = useTranslations('Auth')
+    const t = await getTranslations({ locale, namespace: 'Auth' })
 
     const dbUser = await getUserByEmail(email)
 

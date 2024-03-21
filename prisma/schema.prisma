@@ -107,7 +107,9 @@ model Workspace {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  orders Order[]
+  rawMaterials RawMaterialItem[]
+  products     ProductItem[]
+  orders       Order[]
 }
 
 // core models -------------------------------------
@@ -136,6 +138,9 @@ model RawMaterialItem {
   quantity   Float
   expiryDate DateTime?
 
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id])
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -159,6 +164,9 @@ model ProductItem {
 
   quantity   Float
   expiryDate DateTime?
+
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

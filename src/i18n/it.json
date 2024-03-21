@@ -43,7 +43,8 @@
           "confirmation-email-sent": "Email di conferma inviata. Controlla la casella di posta.",
           "reset-email-sent": "Email inviata. Controlla la casella di posta.",
           "2FA-email-sent": "Codice di verifica inviato. Controlla la casella di posta.",
-          "psw-reset": "Password reimpostata con successo."
+          "psw-reset": "Password reimpostata con successo.",
+          "email-verified": "Email verificata con successo."
         }
       }
     },
