@@ -3,10 +3,12 @@ import { authRouter } from '@/lib/server/trpc/routers/auth-router'
 import { privateProcedure, router } from './init'
 import { adminRouter } from '@/lib/server/trpc/routers/admin-router'
 import { auth } from '@/lib/server/auth'
+import { productionRouter } from '@/lib/server/trpc/routers/production-router'
 
 export const appRouter = router({
   auth: authRouter,
   admin: adminRouter,
+  production: productionRouter,
   getWorkspaces: privateProcedure.query(async ({ ctx: { userId } }) => {
     const session = await auth()
 

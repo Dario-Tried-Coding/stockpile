@@ -6,4 +6,9 @@ export const getTableRawMaterials = async () => {
       rawMaterialItems: true
     }
   })
+
+  const extendedRawMaterials = rawMaterials.map(rawMaterial => ({...rawMaterial, totalItems: rawMaterial.rawMaterialItems.reduce((acc, item) => acc + item.quantity, 0)}))
+  return extendedRawMaterials
 }
+
+export type ExtendedTableRawMaterial = Awaited<ReturnType<typeof getTableRawMaterials>>[number]

@@ -1,10 +1,10 @@
 'use client'
 
 import { Checkbox } from "@/components/ui/checkbox"
-import { RawMaterial } from "@prisma/client"
+import { ExtendedTableRawMaterial } from "@/lib/utils/tables/raw-materials-table"
 import { ColumnDef } from "@tanstack/react-table"
 
-export const columns: ColumnDef<RawMaterial>[] = [
+export const columns: ColumnDef<ExtendedTableRawMaterial>[] = [
   {
     id: 'select',
     cell({ row }) {
@@ -23,6 +23,9 @@ export const columns: ColumnDef<RawMaterial>[] = [
   },
   {
     accessorKey: 'name',
+  },
+  {
+    accessorKey: 'totalItems',
   },
   {
     accessorKey: 'unit',
