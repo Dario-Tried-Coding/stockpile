@@ -144,6 +144,19 @@
     }
   },
   "Pages": {
+    "Dashboard": {
+      "Production": {
+        "Tables": {
+          "RawMaterials": {
+            "Server": {
+              "Errors": {
+                "workarea-not-found": "Workarea non trovata."
+              }
+            }
+          }
+        }
+      }
+    },
     "Users": {
       "heading": "Utenti",
       "sub-heading": "Da qui puoi controllare chi ha accesso alla piattaforma",

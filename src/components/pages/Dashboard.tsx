@@ -1,17 +1,19 @@
 'use client'
 
+import RawMaterialsTable from '@/components/table/rawMaterials/RawMaterialsTable'
 import { useWorkspace } from '@/context/WorkspaceProvider'
-import { trpc } from '@/lib/server/trpc/trpc'
 import { FC } from 'react'
 
-interface DashboardProps {
-  
-}
+interface DashboardProps {}
 
-const Dashboard: FC<DashboardProps> = ({ }) => {
+const Dashboard: FC<DashboardProps> = ({}) => {
   const { workspace } = useWorkspace()
-  const {data} = trpc.production.getRawMaterials.useQuery()
-  return <div>Dashboard - {workspace?.name} - <pre>{JSON.stringify(data, null, 2)}</pre></div>
+
+  return (
+    <div>
+      Dashboard - {workspace?.name} - {workspace?.type === 'PRODUCTION' && <RawMaterialsTable workarea={workspace.workarea} />}
+    </div>
+  )
 }
 
 export default Dashboard

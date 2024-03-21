@@ -106,9 +106,7 @@ model Workspace {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  rawMaterials RawMaterialItem[]
-  products     ProductItem[]
+  
   orders       Order[]
 }
 
@@ -125,6 +123,8 @@ model RawMaterial {
   name String @unique
   unit Unit
 
+  workareas Workarea[]
+
   rawMaterialItems RawMaterialItem[]
   recepyItems      RecepyItem[]
 }
@@ -134,12 +134,11 @@ model RawMaterialItem {
 
   rawMaterialId String
   rawMaterial   RawMaterial @relation(fields: [rawMaterialId], references: [id])
+  
+  workarea Workarea
 
   quantity   Float
   expiryDate DateTime?
-
-  workspaceId String
-  workspace   Workspace @relation(fields: [workspaceId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -149,6 +148,8 @@ model Product {
   id   String @id @default(cuid())
   name String @unique
   unit Unit
+
+  workareas Workarea[]
 
   productItems ProductItem[]
   orderItems   OrderItem[]
@@ -162,11 +163,10 @@ model ProductItem {
   productId String
   product   Product @relation(fields: [productId], references: [id])
 
+  workarea Workarea
+
   quantity   Float
   expiryDate DateTime?
-
-  workspaceId String
-  workspace   Workspace @relation(fields: [workspaceId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
