@@ -7,19 +7,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// user authentication -------------------------------------
 model Account {
-  id                 String  @id @default(cuid())
-  userId             String
-  type               String
-  provider           String
-  providerAccountId  String
-  refresh_token      String?  @db.Text
-  access_token       String?  @db.Text
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String?  @db.Text
-  session_state      String?
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -37,15 +38,15 @@ model User {
   isTwoFactorEnabled    Boolean                @default(false)
   twoFactorConfirmation TwoFactorConfirmation?
 
-  isAdmin    Boolean @default(false)
+  isAdmin Boolean @default(false)
 
   workspaceId String?
-  workspace    Workspace? @relation(fields: [workspaceId], references: [id])
+  workspace   Workspace? @relation(fields: [workspaceId], references: [id])
 
-  accounts      Account[]
+  accounts Account[]
 
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model TwoFactorConfirmation {
@@ -84,6 +85,7 @@ model TwoFactorToken {
   @@unique([email, token])
 }
 
+// user authorization -------------------------------------
 enum Workarea {
   VERSILIA
 }
@@ -101,6 +103,102 @@ model Workspace {
   workarea Workarea
 
   users User[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  orders Order[]
+}
+
+// core models -------------------------------------
+enum Unit {
+  KG
+  L
+  PIECE
+  ENVELOPE
+}
+
+model RawMaterial {
+  id         String    @id @default(cuid())
+  name       String
+  unit       Unit
+  expiryDate DateTime?
+
+  rawMaterialItems RawMaterialItem[]
+
+  recepies Recepy[]
+}
+
+model RawMaterialItem {
+  id String @id @default(cuid())
+
+  rawMaterialId String
+  rawMaterial   RawMaterial @relation(fields: [rawMaterialId], references: [id])
+
+  quantity Float
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Product {
+  id         String    @id @default(cuid())
+  name       String
+  unit       Unit
+  expiryDate DateTime?
+
+  productItems ProductItem[]
+  orderItems   OrderItem[]
+
+  recepy Recepy?
+}
+
+model ProductItem {
+  id String @id @default(cuid())
+
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+
+  quantity Float
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Recepy {
+  id String @id @default(cuid())
+
+  name String
+
+  productId String  @unique
+  product   Product @relation(fields: [productId], references: [id])
+
+  rawMaterialId String
+  rawMaterial   RawMaterial @relation(fields: [rawMaterialId], references: [id])
+  quantity      Float
+}
+
+model Order {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  workspaceId String    @unique
+  workspace   Workspace @relation(fields: [workspaceId], references: [id])
+
+  items OrderItem[]
+}
+
+model OrderItem {
+  id String @id @default(cuid())
+
+  orderId String
+  order   Order  @relation(fields: [orderId], references: [id])
+
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+
+  quantity Float
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

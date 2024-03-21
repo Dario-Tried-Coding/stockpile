@@ -127,6 +127,7 @@
   },
   "Navbar": {
     "Links": {
+      "dashboard": "Dashboard",
       "users": "Users",
       "settings": "Settings"
     },

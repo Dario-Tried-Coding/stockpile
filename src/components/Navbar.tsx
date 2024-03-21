@@ -23,6 +23,11 @@ const Navbar: FC<NavbarProps> = ({ user }) => {
         <div className='flex items-center gap-4'>
           <WorkspaceSwitcher user={user} />
           <ul className='flex gap-4 text-sm font-medium text-muted-foreground'>
+            <li>
+              <Link href='/' className={cn({ 'text-foreground': pathname === '/' })}>
+                {t('Links.dashboard')}
+              </Link>
+            </li>
             {user?.isAdmin && (
               <li>
                 <Link href='/users' className={cn({ 'text-foreground': pathname === '/users' })}>
