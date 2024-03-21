@@ -119,12 +119,12 @@ enum Unit {
 }
 
 model RawMaterial {
-  id         String    @id @default(cuid())
-  name       String
-  unit       Unit
+  id   String @id @default(cuid())
+  name String @unique
+  unit Unit
 
   rawMaterialItems RawMaterialItem[]
-  recepyItems RecepyItem[]
+  recepyItems      RecepyItem[]
 }
 
 model RawMaterialItem {
@@ -133,7 +133,7 @@ model RawMaterialItem {
   rawMaterialId String
   rawMaterial   RawMaterial @relation(fields: [rawMaterialId], references: [id])
 
-  quantity Float
+  quantity   Float
   expiryDate DateTime?
 
   createdAt DateTime @default(now())
@@ -141,9 +141,9 @@ model RawMaterialItem {
 }
 
 model Product {
-  id         String    @id @default(cuid())
-  name       String
-  unit       Unit
+  id   String @id @default(cuid())
+  name String @unique
+  unit Unit
 
   productItems ProductItem[]
   orderItems   OrderItem[]
@@ -157,7 +157,7 @@ model ProductItem {
   productId String
   product   Product @relation(fields: [productId], references: [id])
 
-  quantity Float
+  quantity   Float
   expiryDate DateTime?
 
   createdAt DateTime @default(now())
@@ -171,8 +171,8 @@ model Recepy {
   product   Product @relation(fields: [productId], references: [id])
 
   recepyItems RecepyItem[]
-
 }
+
 model RecepyItem {
   id String @id @default(cuid())
 
@@ -182,7 +182,7 @@ model RecepyItem {
   rawMaterialId String
   rawMaterial   RawMaterial @relation(fields: [rawMaterialId], references: [id])
 
-  quantity      Float
+  quantity Float
 }
 
 model Order {
