@@ -1,4 +1,4 @@
-import { workspaceIcons } from '@/components/icons/WorkspaceIcons'
+import { WorkspaceTypeIcons } from '@/components/icons/WorkspaceIcons'
 import { Avatar, AvatarFallback } from '@/components/ui/Avatar'
 import { Button } from '@/components/ui/Button'
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/Command'
@@ -36,16 +36,16 @@ const WorkspaceSwitcher: FC<WorkspaceSwitcherProps> = ({ className, user, ...res
     {} as Record<Workarea, typeof workspaces>
   )
 
-  const WorkspaceIcon = workspaceIcons.find((icon) => icon.id === workspace?.type)!
+  const WorkspaceIcon = workspace ? WorkspaceTypeIcons[workspace?.type] : null
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild {...rest}>
         <Button variant='outline' role='combobox' aria-expanded={open} aria-label={t('label')} className={cn('w-[250px] justify-between', className)}>
           <Avatar className='mr-2 h-5 w-5'>
-            {workspace ? (
+            {WorkspaceIcon ? (
               <AvatarFallback>
-                <WorkspaceIcon.icon className='h-4 w-4' />
+                <WorkspaceIcon className='h-4 w-4' />
               </AvatarFallback>
             ) : (
               <AvatarFallback className='bg-gradient-to-br from-primary-700 to-primary-300' />
@@ -78,7 +78,7 @@ const WorkspaceSwitcher: FC<WorkspaceSwitcherProps> = ({ className, user, ...res
               Object.entries(organizedWorkspaces).map(([areaName, workspaces]) => (
                 <CommandGroup key={areaName} heading={lodash.capitalize(lodash.lowerCase(areaName))}>
                   {workspaces.map((w) => {
-                    const Icon = workspaceIcons.find((icon) => icon.id === w.type)!
+                    const Icon = WorkspaceTypeIcons[w.type]
 
                     return (
                       <CommandItem
@@ -91,7 +91,7 @@ const WorkspaceSwitcher: FC<WorkspaceSwitcherProps> = ({ className, user, ...res
                       >
                         <Avatar className='mr-2 h-5 w-5'>
                           <AvatarFallback>
-                            <Icon.icon className='h-4 w-4' />
+                            <Icon className='h-4 w-4' />
                           </AvatarFallback>
                         </Avatar>
                         <span className='truncate'>{w.name}</span>

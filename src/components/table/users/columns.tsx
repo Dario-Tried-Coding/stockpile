@@ -2,7 +2,7 @@
 
 import SelectCell from '@/components/table/SelectCell'
 import ActionsCell from '@/components/table/users/ActionsCell'
-import { workspaceIcons as roleIcons } from '@/components/icons/WorkspaceIcons'
+import { WorkspaceTypeIcons as roleIcons } from '@/components/icons/WorkspaceIcons'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -149,7 +149,9 @@ export const columns: ColumnDef<ExtendedUser>[] = [
       const role = getValue() as WorkspaceType | null
       const t = useTranslations('Index.Roles')
 
-      const Icon = roleIcons.find((i) => i.id === role)?.icon
+      if (!role) return '-'
+
+      const Icon = roleIcons[role]
       return role && Icon ? (
         <span className='flex items-center gap-1'>
           <Icon className='h-4 w-4' />

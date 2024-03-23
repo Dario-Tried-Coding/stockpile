@@ -145,13 +145,40 @@
   },
   "Pages": {
     "Dashboard": {
+      "heading": "Dashboard",
+      "sub-heading": "Questa è la pagina di cui puoi avere una visione di insieme sul tuo lavoro.",
+      "Tabs": {
+        "overview": "Panoramica",
+        "raw-materials": "Materie prime"
+      },
       "Production": {
         "Tables": {
           "RawMaterials": {
+            "Units": {
+              "KG": "KG",
+              "L": "L",
+              "PIECE": "PEZZO",
+              "ENVELOPE": "BUSTA "
+            },
             "Server": {
               "Errors": {
                 "workarea-not-found": "Workarea non trovata."
               }
+            },
+            "Client": {
+              "Headers": {
+                "name": "Nome",
+                "total-items": "Totale",
+                "quantity": "Quantità",
+                "unit": "Unità"
+              },
+              "Toolbar": {
+                "reset": "Resetta",
+                "Input": {
+                  "placeholder": "Cerca materia prima..."
+                }
+              },
+              "empty": "Nessuna materia prima trovata."
             }
           }
         }

@@ -1,9 +1,11 @@
+import { WorkspaceTypeIcons } from '@/components/icons/WorkspaceIcons'
 import { TableFacetedFilter } from '@/components/table/TableFacetedFilter'
 import TableViewOptions from '@/components/table/TableViewOptions'
 import ActionsButton from '@/components/table/users/ActionsButton'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { cn } from '@/lib/utils'
+import { UsersTableExtendedUser as ExtendedUser } from '@/lib/utils/tables/users-table'
 import { Table } from '@tanstack/react-table'
 import { XIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
@@ -13,7 +15,7 @@ interface TableToolbarProps<TData> extends HTMLAttributes<HTMLDivElement> {
   table: Table<TData>
 }
 
-export function TableToolbar<TData>({ table, className, ...rest }: TableToolbarProps<TData>) {
+export function TableToolbar<TData extends ExtendedUser>({ table, className, ...rest }: TableToolbarProps<TData>) {
   const roles_t = useTranslations('Index.Roles')
   const toolbar_t = useTranslations('Pages.Users.Table.Client.Toolbar')
   const headers_t = useTranslations('Pages.Users.Table.Client.Headers')
@@ -46,7 +48,7 @@ export function TableToolbar<TData>({ table, className, ...rest }: TableToolbarP
         table={table}
         accessorKey='role'
         title={headers_t('role')}
-        options={tableCtx?.availableRoles.map((r) => ({ label: roles_t(r), id: r })) || []}
+        options={tableCtx?.availableRoles.map((r) => ({ label: roles_t(r), id: r, icon: WorkspaceTypeIcons[r] })) || []}
       />
       {isFiltered && (
         <Button variant='ghost' onClick={() => table.resetColumnFilters()} className='h-8 px-2 lg:px-3'>

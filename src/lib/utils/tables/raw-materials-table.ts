@@ -11,7 +11,8 @@ export const getTableRawMaterials = async (workarea: Workarea) => {
 
   const extendedRawMaterials = rawMaterials.map((rawMaterial) => ({
     ...rawMaterial,
-    totalItems: rawMaterial.rawMaterialItems.reduce((acc, item) => acc + item.quantity, 0),
+    totalItems: rawMaterial.rawMaterialItems.length,
+    quantity: rawMaterial.rawMaterialItems.reduce((acc, item) => acc + item.quantity, 0),
   }))
 
   const filteredRawMaterials = extendedRawMaterials.filter((rawMaterial) => rawMaterial.totalItems > 0)

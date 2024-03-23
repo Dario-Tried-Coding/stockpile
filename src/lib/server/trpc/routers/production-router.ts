@@ -1,4 +1,4 @@
-import { PRODUCTION } from '@/config/roles.config'
+import { PRODUCTION } from '@/constants/roles'
 import { RawMaterialsTableValidator } from '@/lib/common/validators/production/tables'
 import { roleBasedProcedure, router } from '@/lib/server/trpc/init'
 import { getTableRawMaterials } from '@/lib/utils/tables/raw-materials-table'

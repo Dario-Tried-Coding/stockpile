@@ -31,7 +31,7 @@
       "Server": {
         "Errors": {
           "user-not-found": "User not found.",
-          "email-not-usable": "Email not usable. Try another email.",
+          "email-not-usable": "Email not usable. Try with a different email.",
           "email-not-found": "Email address not found. Please check and try again.",
           "wrong-credentials": "Incorrect email or password. Please verify and try again.",
           "2fa-token-invalid": "Invalid verification code. Please verify and try again.",
@@ -43,18 +43,19 @@
           "confirmation-email-sent": "Confirmation email sent. Check your inbox.",
           "reset-email-sent": "Email sent. Check your inbox.",
           "2FA-email-sent": "Verification code sent. Check your inbox.",
-          "psw-reset": "Password reset successfully."
+          "psw-reset": "Password reset successfully.",
+          "email-verified": "Email verified successfully."
         }
       }
     },
     "Fields": {
       "Name": {
         "label": "Name",
-        "placeholder": "Mario Rossi"
+        "placeholder": "John Doe"
       },
       "Email": {
         "label": "Email",
-        "placeholder": "mario.rossi@email.com"
+        "placeholder": "john.doe@email.com"
       },
       "Password": {
         "label": "Password",
@@ -69,7 +70,7 @@
         "placeholder": "123456"
       }
     },
-    "policy": "By continuing, you accept our <termsLink>Terms of Service</termsLink> and <privacyLink>Privacy Policy</privacyLink>.",
+    "policy": "By continuing, you agree to our <termsLink>Terms of Service</termsLink> and <privacyLink>Privacy Policy</privacyLink>.",
     "logout": "Logout",
     "Credentials": {
       "Login": {
@@ -86,30 +87,30 @@
       },
       "Reset": {
         "heading": "Forgot Password?",
-        "footnote": "Enter the email address you used to create your account and we'll send you a link to reset it.",
-        "link": "Forgot your password?",
+        "footnote": "Enter the email address you used to create your account, and we'll send you a link to reset it.",
+        "link": "Forgot password?",
         "send": "Send email"
       },
       "NewPassword": {
         "heading": "Create New Password",
         "footnote": "Enter and confirm the new password you want to set for your account.",
-        "cta": "Create New Password"
+        "cta": "Create new password"
       },
       "Verify": {
         "Heading": {
           "error": "Email confirmation failed",
-          "success": "Email confirmation successful",
+          "success": "Email confirmed",
           "pending": "Email confirmation in progress..."
         },
         "Footnote": {
           "generic-error": "We couldn't verify your email.",
           "expired": "The verification link is invalid or expired. Request a new link.",
-          "success": "Your email has been successfully verified. You can now access your account.",
+          "success": "Your email has been verified successfully. You can now access your account.",
           "pending": "Please wait while we verify your email."
         },
         "ContactSupport": {
           "error": "If the problem persists, please contact support.",
-          "success": "For any questions, contact our support team."
+          "success": "For any queries, please contact our support team."
         },
         "do-not-close-window": "This may take a few moments. Please do not close the page."
       }
@@ -122,7 +123,7 @@
     "Wait": {
       "heading": "Limited Access",
       "sub-heading": "Your account is pending verification. Please wait.",
-      "contact-support": "For any questions, contact our support team."
+      "contact-support": "For any queries, please contact our support team."
     }
   },
   "Navbar": {
@@ -143,9 +144,49 @@
     }
   },
   "Pages": {
+    "Dashboard": {
+      "heading": "Dashboard",
+      "sub-heading": "This is the page where you can get an overview of your work.",
+      "Tabs": {
+        "overview": "Overview",
+        "raw-materials": "Raw Materials"
+      },
+      "Production": {
+        "Tables": {
+          "RawMaterials": {
+            "Units": {
+              "KG": "KG",
+              "L": "L",
+              "PIECE": "PIECE",
+              "ENVELOPE": "ENVELOPE"
+            },
+            "Server": {
+              "Errors": {
+                "workarea-not-found": "Workarea not found."
+              }
+            },
+            "Client": {
+              "Headers": {
+                "name": "Name",
+                "total-items": "Total",
+                "quantity": "Quantity",
+                "unit": "Unit"
+              },
+              "Toolbar": {
+                "reset": "Reset",
+                "Input": {
+                  "placeholder": "Search raw material..."
+                }
+              },
+              "empty": "No raw material found."
+            }
+          }
+        }
+      }
+    },
     "Users": {
       "heading": "Users",
-      "sub-heading": "Here you can manage who has access to the platform",
+      "sub-heading": "From here, you can check who has access to the platform",
       "Table": {
         "Client": {
           "Toolbar": {
@@ -181,7 +222,7 @@
             "open-menu": "Open menu",
             "edit": "Edit",
             "save-mods": "Save changes",
-            "revert-mods": "Undo changes",
+            "revert-mods": "Discard changes",
             "accept": "Accept",
             "Delete": {
               "label": "Delete",
@@ -205,10 +246,10 @@
             "User": {
               "edit-not-found": "The user you are trying to edit seems to not exist. Try reloading the page.",
               "save-not-found": "The user you are trying to save seems to not exist. Try reloading the page.",
-              "save-without-workspace": "The user you are trying to save seems not to be assigned to any workspace. Try reloading the page."
+              "save-without-workspace": "The user you are trying to save doesn't seem to be assigned to any workspace. Try reloading the page."
             },
             "Workspace": {
-              "edit-not-found": "The workspace you attempted to select seems to not exist. Try reloading the page."
+              "edit-not-found": "The workspace you tried to select seems to not exist. Try reloading the page."
             }
           },
           "Placeholders": {
@@ -223,7 +264,7 @@
           },
           "Success": {
             "user-updated": "User updated successfully.",
-            "users-deleted": "{count, plural, =1 {Deleted} other {Deleted}} successfully {count, plural, =1 {one user} other {# users}}.",
+            "users-deleted": "{count, plural, =1 {One user} other {# users}} deleted successfully.",
             "user-deleted": "User deleted successfully."
           }
         }
